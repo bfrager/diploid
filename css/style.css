@@ -1,3 +1,21 @@
+#diploid {
+  width: 960px;
+  height: 600px;
+  background: #999;
+  margin: 0 auto;
+  position: relative; }
 
+.orb {
+  position: absolute;
+  border-radius: 100px;
+  width: 25px;
+  height: 25px; }
+
+#p1 {
+  background: blue; }
+
+#p2 {
+  background: red;
+  left: 50px; }
 
 /*# sourceMappingURL=style.css.map */
