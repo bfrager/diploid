@@ -12,11 +12,14 @@
   height: 25px; }
 
 #p1 {
-  background: #55154a; }
+  background: #55154a;
+  left: 0;
+  top: 0; }
 
 #p2 {
   background: #2a668a;
-  left: 50px; }
+  left: 300px;
+  top: 100px; }
 
 #line {
   stroke: #ff2500;
