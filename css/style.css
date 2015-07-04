@@ -12,10 +12,14 @@
   height: 25px; }
 
 #p1 {
-  background: blue; }
+  background: #55154a; }
 
 #p2 {
-  background: red;
+  background: #2a668a;
   left: 50px; }
+
+#line {
+  stroke: #ff2500;
+  stroke-width: 2; }
 
 /*# sourceMappingURL=style.css.map */
