@@ -4,22 +4,33 @@ $(function(){
     var p2 = $('#p2');
     var line = $('#line');
 
+    //player move states:
+    var p1MoveLeft = false;
+    var p1MoveRight = false;
+    var p1MoveUp = false;
+    var p1MoveDown = false;
+
+    var p2MoveLeft = false;
+    var p2MoveRight = false;
+    var p2MoveUp = false;
+    var p2MoveDown = false;
+
     //player 1 key listeners
     $(body).keydown(function(p1) {
         // prevent arrow keys from scrolling the page
         //event.preventDefault();
         p1k = p1.keyCode;
-        if (p1k==37) {console.log('left down')}
-        if (p1k==39) {console.log('right down')}
-        if (p1k==38) {console.log('up down')}
-        if (p1k==40) {console.log('down down')}
+        if (p1k==37) {console.log('left down');p1MoveLeft = true;}
+        if (p1k==39) {console.log('right down');p1MoveRight = true;}
+        if (p1k==38) {console.log('up down');p1MoveUp = true;}
+        if (p1k==40) {console.log('down down');p1MoveDown = true;}
     });
     $(body).keyup(function(p1) {
         p1k = p1.keyCode;
-        if (p1k==37) {console.log('left up')}
-        if (p1k==39) {console.log('right up')}
-        if (p1k==38) {console.log('up up')}
-        if (p1k==40) {console.log('down up')}
+        if (p1k==37) {console.log('left up');p1MoveLeft = false;}
+        if (p1k==39) {console.log('right up');p1MoveRight = false;}
+        if (p1k==38) {console.log('up up');p1MoveUp = false;}
+        if (p1k==40) {console.log('down up');p1MoveDown = false;}
     });
 
     //player 2 key listeners
@@ -27,17 +38,17 @@ $(function(){
         // prevent arrow keys from scrolling the page
         //event.preventDefault();
         p2k = p2.keyCode;
-        if (p2k==65) {console.log('left down')}
-        if (p2k==68) {console.log('right down')}
-        if (p2k==87) {console.log('up down')}
-        if (p2k==83) {console.log('down down')}
+        if (p2k==65) {console.log('left down');p2MoveLeft = true}
+        if (p2k==68) {console.log('right down');p2MoveRight = true}
+        if (p2k==87) {console.log('up down');p2MoveUp = true}
+        if (p2k==83) {console.log('down down');p2MoveDown = true}
     });
     $(body).keyup(function(p2) {
         p2k = p2.keyCode;
-        if (p2k==65) {console.log('left up')}
-        if (p2k==68) {console.log('right up')}
-        if (p2k==87) {console.log('up up')}
-        if (p2k==83) {console.log('down up')}
+        if (p2k==65) {console.log('left up');p2MoveLeft = false}
+        if (p2k==68) {console.log('right up');p2MoveRight = false}
+        if (p2k==87) {console.log('up up');p2MoveUp = false}
+        if (p2k==83) {console.log('down up');p2MoveDown = false}
     });
 
     function alignLine() {
