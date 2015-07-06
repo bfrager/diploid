@@ -1,7 +1,24 @@
 $(function(){
+    var body = $('body');
     var p1 = $('#p1');
     var p2 = $('#p2');
     var line = $('#line');
+
+    //key listeners
+    $(body).keydown(function(e) {
+        ek = e.keyCode;
+        if (ek==37) {console.log('left down')}
+        if (ek==39) {console.log('right down')}
+        if (ek==38) {console.log('up down')}
+        if (ek==40) {console.log('down down')}
+    });
+    $(body).keyup(function(e) {
+        ek = e.keyCode;
+        if (ek==37) {console.log('left up')}
+        if (ek==39) {console.log('right up')}
+        if (ek==38) {console.log('up up')}
+        if (ek==40) {console.log('down up')}
+    });
 
     function alignLine() {
         var player1CenterX = (parseInt($(p1).css("left")) + (parseInt($(p1).width()) / 2 ));
