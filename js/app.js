@@ -17,11 +17,13 @@ $(function(){
 
     function tick() {
         // everything that gets checked / run per frame
+        alignLine();
         console.log('New Frame!');
     }
 
     //initialize the game
     function initDiploid() {
+        alignLine();
         startGame = setInterval(tick, 10);
     }
 
