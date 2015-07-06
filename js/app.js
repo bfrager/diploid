@@ -1,5 +1,6 @@
 $(function(){
     var body = $('body');
+    var diploid = $('#diploid');
     var p1 = $('#p1');
     var p1W = $(p1).width();
     var p1H = p1W;
@@ -20,6 +21,15 @@ $(function(){
     var p2MoveRight = false;
     var p2MoveUp = false;
     var p2MoveDown = false;
+
+//build ghost players to check for move validity before moving real players:
+    diploid.prepend("<div id='ghost1' class='ghost'></div>");
+    diploid.prepend("<div id='ghost2' class='ghost'></div>");
+    var g1 = $('#ghost1');
+    var g2 = $('#ghost2');
+    $(g1).css({'left': $(p1).position().left, 'top': $(p1).position().top});
+    $(g2).css({'left': $(p2).position().left, 'top': $(p2).position().top});
+
 
     //player 1 key listeners
     $(body).keydown(function(p1) {
@@ -70,14 +80,10 @@ $(function(){
     }
 
     function tick() {
-        //store player coordinates
-        var p1x = $(p1).css('left');
-        var p1y = $(p1).css('top');
-        var p2x = $(p2).css('left');
-        var p2y = $(p2).css('top');
 
-        $(p1).css({'left': '+=2'});
-        $(p2).css({'left': '+=1'});
+        //test movement per frame:
+        /*$(p1).css({'left': '+=2'});
+        $(p2).css({'left': '+=1'});*/
 
         alignLine();
         console.log('New Frame!');

@@ -5,7 +5,7 @@
   margin: 0 auto;
   position: relative; }
 
-.orb {
+.orb, .ghost {
   position: absolute;
   border-radius: 100px;
   width: 25px;
@@ -20,6 +20,9 @@
   background: #2a668a;
   left: 300px;
   top: 100px; }
+
+.ghost {
+  visibility: hidden; }
 
 svg {
   width: 100%;
