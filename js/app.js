@@ -4,20 +4,42 @@ $(function(){
     var p2 = $('#p2');
     var line = $('#line');
 
-    //key listeners
-    $(body).keydown(function(e) {
-        ek = e.keyCode;
-        if (ek==37) {console.log('left down')}
-        if (ek==39) {console.log('right down')}
-        if (ek==38) {console.log('up down')}
-        if (ek==40) {console.log('down down')}
+    //player 1 key listeners
+    $(body).keydown(function(p1) {
+        // prevent arrow keys from scrolling the page
+        //event.preventDefault();
+
+        p1k = p1.keyCode;
+        if (p1k==37) {console.log('left down')}
+        if (p1k==39) {console.log('right down')}
+        if (p1k==38) {console.log('up down')}
+        if (p1k==40) {console.log('down down')}
     });
-    $(body).keyup(function(e) {
-        ek = e.keyCode;
-        if (ek==37) {console.log('left up')}
-        if (ek==39) {console.log('right up')}
-        if (ek==38) {console.log('up up')}
-        if (ek==40) {console.log('down up')}
+    $(body).keyup(function(p1) {
+        p1k = p1.keyCode;
+        if (p1k==37) {console.log('left up')}
+        if (p1k==39) {console.log('right up')}
+        if (p1k==38) {console.log('up up')}
+        if (p1k==40) {console.log('down up')}
+    });
+
+    //player 2 key listeners
+    $(body).keydown(function(p2) {
+        // prevent arrow keys from scrolling the page
+        //event.preventDefault();
+
+        p2k = p2.keyCode;
+        if (p2k==65) {console.log('left down')}
+        if (p2k==68) {console.log('right down')}
+        if (p2k==87) {console.log('up down')}
+        if (p2k==83) {console.log('down down')}
+    });
+    $(body).keyup(function(p2) {
+        p2k = p2.keyCode;
+        if (p2k==65) {console.log('left up')}
+        if (p2k==68) {console.log('right up')}
+        if (p2k==87) {console.log('up up')}
+        if (p2k==83) {console.log('down up')}
     });
 
     function alignLine() {
@@ -41,7 +63,7 @@ $(function(){
     //initialize the game
     function initDiploid() {
         alignLine();
-        startGame = setInterval(tick, 10);
+        //startGame = setInterval(tick, 10);
     }
 
     $('#stop').click(function(){
