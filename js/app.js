@@ -11,6 +11,8 @@ $(function(){
 
     var line = $('#line');
 
+    var speed = 3;
+
     //player move states:
     var p1MoveLeft = false;
     var p1MoveRight = false;
@@ -85,15 +87,15 @@ $(function(){
         //$(p1).css({'left': '+=2'});
         //$(p2).css({'left': '+=1'});
 
-        if(p1MoveLeft) {$(p1).css({'left': '-=1'});}
-        if(p1MoveRight) {$(p1).css({'left': '+=1'});}
-        if(p1MoveUp) {$(p1).css({'top': '-=1'});}
-        if(p1MoveDown) {$(p1).css({'top': '+=1'});}
+        if(p1MoveLeft) {$(p1).css({'left': '-=' + speed});}
+        if(p1MoveRight) {$(p1).css({'left': '+=' + speed});}
+        if(p1MoveUp) {$(p1).css({'top': '-=' + speed});}
+        if(p1MoveDown) {$(p1).css({'top': '+=' + speed});}
 
-        if(p2MoveLeft) {$(p2).css({'left': '-=1'});}
-        if(p2MoveRight) {$(p2).css({'left': '+=1'});}
-        if(p2MoveUp) {$(p2).css({'top': '-=1'});}
-        if(p2MoveDown) {$(p2).css({'top': '+=1'});}
+        if(p2MoveLeft) {$(p2).css({'left': '-='+speed});}
+        if(p2MoveRight) {$(p2).css({'left': '+=' + speed});}
+        if(p2MoveUp) {$(p2).css({'top': '-=' + speed});}
+        if(p2MoveDown) {$(p2).css({'top': '+=' + speed});}
 
 
         alignLine();
