@@ -36,17 +36,17 @@ $(function(){
         // prevent arrow keys from scrolling the page
         //event.preventDefault();
         p1k = p1.keyCode;
-        if (p1k==37) {console.log('left down');p1MoveLeft = true;}
-        if (p1k==39) {console.log('right down');p1MoveRight = true;}
-        if (p1k==38) {console.log('up down');p1MoveUp = true;}
-        if (p1k==40) {console.log('down down');p1MoveDown = true;}
+        if (p1k==65) {console.log('left down');p1MoveLeft = true}
+        if (p1k==68) {console.log('right down');p1MoveRight = true}
+        if (p1k==87) {console.log('up down');p1MoveUp = true}
+        if (p1k==83) {console.log('down down');p1MoveDown = true}
     });
     $(body).keyup(function(p1) {
         p1k = p1.keyCode;
-        if (p1k==37) {console.log('left up');p1MoveLeft = false;}
-        if (p1k==39) {console.log('right up');p1MoveRight = false;}
-        if (p1k==38) {console.log('up up');p1MoveUp = false;}
-        if (p1k==40) {console.log('down up');p1MoveDown = false;}
+        if (p1k==65) {console.log('left up');p1MoveLeft = false}
+        if (p1k==68) {console.log('right up');p1MoveRight = false}
+        if (p1k==87) {console.log('up up');p1MoveUp = false}
+        if (p1k==83) {console.log('down up');p1MoveDown = false}
     });
 
     //player 2 key listeners
@@ -54,17 +54,17 @@ $(function(){
         // prevent arrow keys from scrolling the page
         //event.preventDefault();
         p2k = p2.keyCode;
-        if (p2k==65) {console.log('left down');p2MoveLeft = true}
-        if (p2k==68) {console.log('right down');p2MoveRight = true}
-        if (p2k==87) {console.log('up down');p2MoveUp = true}
-        if (p2k==83) {console.log('down down');p2MoveDown = true}
+        if (p2k==37) {console.log('left down');p2MoveLeft = true;}
+        if (p2k==39) {console.log('right down');p2MoveRight = true;}
+        if (p2k==38) {console.log('up down');p2MoveUp = true;}
+        if (p2k==40) {console.log('down down');p2MoveDown = true;}
     });
     $(body).keyup(function(p2) {
         p2k = p2.keyCode;
-        if (p2k==65) {console.log('left up');p2MoveLeft = false}
-        if (p2k==68) {console.log('right up');p2MoveRight = false}
-        if (p2k==87) {console.log('up up');p2MoveUp = false}
-        if (p2k==83) {console.log('down up');p2MoveDown = false}
+        if (p2k==37) {console.log('left up');p2MoveLeft = false;}
+        if (p2k==39) {console.log('right up');p2MoveRight = false;}
+        if (p2k==38) {console.log('up up');p2MoveUp = false;}
+        if (p2k==40) {console.log('down up');p2MoveDown = false;}
     });
 
     function alignLine() {
