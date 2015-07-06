@@ -22,7 +22,7 @@ $(function(){
     var p2MoveUp = false;
     var p2MoveDown = false;
 
-//build ghost players to check for move validity before moving real players:
+    //build ghost players to check for move validity before moving real players:
     diploid.prepend("<div id='ghost1' class='ghost'></div>");
     diploid.prepend("<div id='ghost2' class='ghost'></div>");
     var g1 = $('#ghost1');
@@ -82,8 +82,19 @@ $(function(){
     function tick() {
 
         //test movement per frame:
-        /*$(p1).css({'left': '+=2'});
-        $(p2).css({'left': '+=1'});*/
+        //$(p1).css({'left': '+=2'});
+        //$(p2).css({'left': '+=1'});
+
+        if(p1MoveLeft) {$(p1).css({'left': '-=1'});}
+        if(p1MoveRight) {$(p1).css({'left': '+=1'});}
+        if(p1MoveUp) {$(p1).css({'top': '-=1'});}
+        if(p1MoveDown) {$(p1).css({'top': '+=1'});}
+
+        if(p2MoveLeft) {$(p2).css({'left': '-=1'});}
+        if(p2MoveRight) {$(p2).css({'left': '+=1'});}
+        if(p2MoveUp) {$(p2).css({'top': '-=1'});}
+        if(p2MoveDown) {$(p2).css({'top': '+=1'});}
+
 
         alignLine();
         console.log('New Frame!');
@@ -92,7 +103,7 @@ $(function(){
     //initialize the game
     function initDiploid() {
         alignLine();
-        startGame = setInterval(tick, 50);
+        startGame = setInterval(tick, 10);
     }
 
     //stop game with spacebar
