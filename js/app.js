@@ -8,7 +8,6 @@ $(function(){
     $(body).keydown(function(p1) {
         // prevent arrow keys from scrolling the page
         //event.preventDefault();
-
         p1k = p1.keyCode;
         if (p1k==37) {console.log('left down')}
         if (p1k==39) {console.log('right down')}
@@ -27,7 +26,6 @@ $(function(){
     $(body).keydown(function(p2) {
         // prevent arrow keys from scrolling the page
         //event.preventDefault();
-
         p2k = p2.keyCode;
         if (p2k==65) {console.log('left down')}
         if (p2k==68) {console.log('right down')}
