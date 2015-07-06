@@ -12,6 +12,8 @@ Player 1 moves their orb up, left, down, and right with the W,A,S,D keys respect
 
 Player 2 moves their orb up, left, down, and right with the arrow keys respectively.
 
+![alt tag](https://github.com/philuchansky/diploid/blob/master/mockup/diploidMockup01.png)
+
 # User Stories
 
 As a player, I have the option of playing the game without a partner, so that I can enjoy it solo when there's no-one to play with.
