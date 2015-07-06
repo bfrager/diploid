@@ -6,6 +6,12 @@ A two-player cooperative game, where incoming obstacles must be dodged to earn a
 
 Each player controls a single orb. The player's orbs are linked together by a beam that must stay out of the path of incoming blocks. The longer the beam stays uninterrupted, the higher the score achieved, and the harder the game gets.
 
+## Controls
+
+Player 1 moves their orb up, left, down, and right with the W,A,S,D keys respectively.
+
+Player 2 moves their orb up, left, down, and right with the arrow keys respectively.
+
 # User Stories
 
 As a player, I have the option of playing the game without a partner, so that I can enjoy it solo when there's no-one to play with.
@@ -23,4 +29,3 @@ As a player, I experience collision detection with the bounds of the game window
 As a player, I can enter my name before playing, so that the experience of scoring high is more personalized on-screen.
 
 As a player, I can share my score on major social networks to get friends interested in playing the game.
-
