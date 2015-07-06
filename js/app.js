@@ -1,7 +1,13 @@
 $(function(){
     var body = $('body');
     var p1 = $('#p1');
+    var p1W = $(p1).width();
+    var p1H = p1W;
+
     var p2 = $('#p2');
+    var p2W = $(p2).width();
+    var p2H = p2W;
+
     var line = $('#line');
 
     //player move states:
@@ -64,7 +70,15 @@ $(function(){
     }
 
     function tick() {
-        // everything that gets checked / run per frame
+        //store player coordinates
+        var p1x = $(p1).css('left');
+        var p1y = $(p1).css('top');
+        var p2x = $(p2).css('left');
+        var p2y = $(p2).css('top');
+
+        $(p1).css({'left': '+=2'});
+        $(p2).css({'left': '+=1'});
+
         alignLine();
         console.log('New Frame!');
     }
@@ -72,11 +86,17 @@ $(function(){
     //initialize the game
     function initDiploid() {
         alignLine();
-        //startGame = setInterval(tick, 10);
+        startGame = setInterval(tick, 50);
     }
 
-    $('#stop').click(function(){
-        clearInterval(startGame);
+    //stop game with spacebar
+    $(body).keydown(function(s){
+        if(s.keyCode == 32){
+            // without scrolling the page down
+            event.preventDefault();
+            clearInterval(startGame);
+            console.log('Game Stopped!');
+        }
     });
 
     initDiploid();
