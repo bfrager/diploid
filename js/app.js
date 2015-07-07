@@ -81,6 +81,23 @@ $(function(){
         $(line).attr('y2',player2CenterY);
     }
 
+    function checkOutOfBounds(obj,bounds) {
+        var objLeft = obj.position().left;
+        var objRight = objLeft + obj.width();
+        var objTop = obj.position().top;
+        var objBottom = objTop + obj.height();
+
+        var boundsLeft = 0;
+        var boundsRight = bounds.width();
+        var boundsTop = 0;
+        var boundsBottom = bounds.height();
+
+        return !(objLeft < boundsLeft || objRight > boundsRight || objTop < boundsTop || objBottom > boundsBottom);
+    }
+    /*function checkCollision() {
+
+    }*/
+
     function tick() {
 
         //test movement per frame:
@@ -99,7 +116,8 @@ $(function(){
 
 
         alignLine();
-        console.log('New Frame!');
+        //console.log('New Frame!');
+        checkOutOfBounds($(p2),$(diploid));
     }
 
     //initialize the game
@@ -117,7 +135,6 @@ $(function(){
             console.log('Game Stopped!');
         }
     });
-
     initDiploid();
 });
 
