@@ -4,7 +4,7 @@ body {
 
 #diploid {
   width: 960px;
-  height: 600px;
+  height: 400px;
   background: #999;
   margin: 0 auto;
   position: relative; }
@@ -35,5 +35,13 @@ svg {
 #line {
   stroke: #ff2500;
   stroke-width: 2; }
+
+#testBlock {
+  width: 100px;
+  height: 100px;
+  background: #ee6e4d;
+  position: absolute;
+  left: 250px;
+  top: 300px; }
 
 /*# sourceMappingURL=style.css.map */

@@ -94,16 +94,27 @@ $(function(){
 
         return !(objLeft < boundsLeft || objRight > boundsRight || objTop < boundsTop || objBottom > boundsBottom);
     }
-    /*function checkCollision() {
 
-    }*/
+    function checkCollision(obj1,obj2) {
+        var pos1 = obj1.position();
+        var pos2 = obj2.position();
+
+        var left1 = pos1.left;
+        var right1 = left1 + obj1.width();
+        var top1 = pos1.top;
+        var bottom1 = top1 + obj1.height();
+
+        var left2 = pos2.left;
+        var right2 = left2 + obj2.width();
+        var top2 = pos2.top;
+        var bottom2 = top2 + obj2.height();
+
+        return ((right1 > left2 && (bottom1 > top2 && top1 < bottom2)) && (left1 < right2 && (top1 < bottom2 && bottom1 > top2)));
+
+
+    }
 
     function tick() {
-
-        //test movement per frame:
-        //$(p1).css({'left': '+=2'});
-        //$(p2).css({'left': '+=1'});
-
         if(p1MoveLeft) {$(p1).css({'left': '-=' + speed});}
         if(p1MoveRight) {$(p1).css({'left': '+=' + speed});}
         if(p1MoveUp) {$(p1).css({'top': '-=' + speed});}
@@ -114,16 +125,18 @@ $(function(){
         if(p2MoveUp) {$(p2).css({'top': '-=' + speed});}
         if(p2MoveDown) {$(p2).css({'top': '+=' + speed});}
 
-
         alignLine();
-        //console.log('New Frame!');
-        checkOutOfBounds($(p2),$(diploid));
+        console.log();
+        if(checkCollision($(p1),$('#testBlock'))) {
+            console.log('COLLISION DETECTED!');
+        }
     }
 
     //initialize the game
     function initDiploid() {
         alignLine();
         startGame = setInterval(tick, 10);
+        console.log($(p1));
     }
 
     //stop game with spacebar
