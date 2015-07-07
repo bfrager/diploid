@@ -3,7 +3,6 @@ $(function(){
     var diploid = $('#diploid');
     var p1 = $('#p1');
     var p2 = $('#p2');
-
     var testBlock = $('#testBlock');
     var blockBLX = null;
     var blockTLY = null;
@@ -12,12 +11,10 @@ $(function(){
 
     //line
     var line = $('#line');
-
     var lineP1X = null;
     var lineP1Y = null;
     var lineP2X = null;
     var lineP2Y = null;
-
     var lineP1 = [];
     var lineP2 = [];
 
@@ -35,6 +32,9 @@ $(function(){
     var p2MoveUp = false;
     var p2MoveDown = false;
 
+    //create startGame for setInterval() in initDeploid()
+    var startGame = null;
+
     //build ghost players to check for move validity before moving real players:
     diploid.prepend("<div id='ghost1' class='ghost'></div>");
     diploid.prepend("<div id='ghost2' class='ghost'></div>");
@@ -45,14 +45,14 @@ $(function(){
 
     //player 1 key listeners
     $(body).keydown(function(p1) {
-        p1k = p1.keyCode;
+        var p1k = p1.keyCode;
         if (p1k==65) {p1MoveLeft = true}
         if (p1k==68) {p1MoveRight = true}
         if (p1k==87) {p1MoveUp = true}
         if (p1k==83) {p1MoveDown = true}
     });
     $(body).keyup(function(p1) {
-        p1k = p1.keyCode;
+        var p1k = p1.keyCode;
         if (p1k==65) {p1MoveLeft = false}
         if (p1k==68) {p1MoveRight = false}
         if (p1k==87) {p1MoveUp = false}
@@ -61,14 +61,14 @@ $(function(){
 
     //player 2 key listeners
     $(body).keydown(function(p2) {
-        p2k = p2.keyCode;
+        var p2k = p2.keyCode;
         if (p2k==37) {p2MoveLeft = true;}
         if (p2k==39) {p2MoveRight = true;}
         if (p2k==38) {p2MoveUp = true;}
         if (p2k==40) {p2MoveDown = true;}
     });
     $(body).keyup(function(p2) {
-        p2k = p2.keyCode;
+        var p2k = p2.keyCode;
         if (p2k==37) {p2MoveLeft = false;}
         if (p2k==39) {p2MoveRight = false;}
         if (p2k==38) {p2MoveUp = false;}
