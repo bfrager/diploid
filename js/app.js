@@ -2,12 +2,7 @@ $(function(){
     var body = $('body');
     var diploid = $('#diploid');
     var p1 = $('#p1');
-    var p1W = $(p1).width();
-    var p1H = p1W;
-
     var p2 = $('#p2');
-    var p2W = $(p2).width();
-    var p2H = p2W;
 
     var testBlock = $('#testBlock');
     var blockBLX = null;
@@ -50,8 +45,6 @@ $(function(){
 
     //player 1 key listeners
     $(body).keydown(function(p1) {
-        // prevent arrow keys from scrolling the page
-        //event.preventDefault();
         p1k = p1.keyCode;
         if (p1k==65) {p1MoveLeft = true}
         if (p1k==68) {p1MoveRight = true}
@@ -68,8 +61,6 @@ $(function(){
 
     //player 2 key listeners
     $(body).keydown(function(p2) {
-        // prevent arrow keys from scrolling the page
-        //event.preventDefault();
         p2k = p2.keyCode;
         if (p2k==37) {p2MoveLeft = true;}
         if (p2k==39) {p2MoveRight = true;}
@@ -104,11 +95,9 @@ $(function(){
         lineP2 = [lineP2X,lineP2Y];
 
         //length of line:
-/*
-        var lineW = Math.abs($(line).attr('x1') - $(line).attr('x2'));
+        /* var lineW = Math.abs($(line).attr('x1') - $(line).attr('x2'));
         var lineH = Math.abs($(line).attr('y1') - $(line).attr('y2'));
-        var lineLength = Math.round(Math.sqrt((lineW * lineW) + (lineH * lineH)));
-*/
+        var lineLength = Math.round(Math.sqrt((lineW * lineW) + (lineH * lineH)));*/
     }
 
     function checkOutOfBounds(obj,bounds) {
@@ -161,7 +150,7 @@ $(function(){
             console.log('WE HAVE INTERSECTION!!!');
         }
     }
-    /********** Collision detection for line **********/
+    /********************/
 
     function moveTestBlock() {
         $(testBlock).css({'top': $(testBlock).position().top -.5});
