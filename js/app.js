@@ -20,9 +20,17 @@ $(function(){
     //global speed
     var speed = 3;
 
-    var Player = function Player(selectorID,ghostID,lKeyCode,rKeyCode,uKeyCode,dKeyCode) {
+    var playerArray = [];
+
+    var Player = function(selectorID,ghostID,lKeyCode,rKeyCode,uKeyCode,dKeyCode) {
         var player = this;
         player.sel = $('#' + selectorID);
+
+        //
+        player.getCenter = function() {
+            player.centerX = (parseInt($(player.sel).css("left")) + (parseInt($(player.sel).width()) / 2 ));
+            player.centerY = (parseInt($(player.sel).css("top")) + (parseInt($(player.sel).height()) / 2 ));
+        };
 
         //is player currently trying to move?
         player.moveLeft = false;
@@ -51,6 +59,9 @@ $(function(){
             if (p1k==uKeyCode) {player.moveUp = false}
             if (p1k==dKeyCode) {player.moveDown = false}
         });
+
+        //add this player to the player array so that both players can be targeted together quickly
+        playerArray.push(player);
     };
 
     var p1 = new Player('p1',"ghost1",65,68,87,83);
@@ -60,15 +71,14 @@ $(function(){
     var startGame = null;
 
     function alignLine() {
-        var player1CenterX = (parseInt($(p1.sel).css("left")) + (parseInt($(p1.sel).width()) / 2 ));
-        var player1CenterY = (parseInt($(p1.sel).css("top")) + (parseInt($(p1.sel).height()) / 2 ));
-        var player2CenterX = (parseInt($(p2.sel).css("left")) + (parseInt($(p2.sel).width()) / 2 ));
-        var player2CenterY = (parseInt($(p2.sel).css("top")) + (parseInt($(p2.sel).height()) / 2 ));
+        //retrieve each player's updated center point bedore aligning the line
+        p1.getCenter();
+        p2.getCenter();
 
-        $(line).attr('x1', player1CenterX);
-        $(line).attr('y1',player1CenterY);
-        $(line).attr('x2', player2CenterX);
-        $(line).attr('y2',player2CenterY);
+        $(line).attr('x1', p1.centerX);
+        $(line).attr('y1',p1.centerY);
+        $(line).attr('x2', p2.centerX);
+        $(line).attr('y2',p2.centerY);
 
         lineP1X = $(line).attr('x1');
         lineP1Y = $(line).attr('y1');
