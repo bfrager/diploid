@@ -22,15 +22,36 @@ $(function(){
     var speed = 3;
 
     //player move states:
-    var p1MoveLeft = false;
-    var p1MoveRight = false;
-    var p1MoveUp = false;
-    var p1MoveDown = false;
+    //var p1.moveLeft = false;
+    /*p1.moveLeft = false;
+    p1.moveRight = false;
+    p1.moveUp = false;
+    p1.moveDown = false;
 
-    var p2MoveLeft = false;
-    var p2MoveRight = false;
-    var p2MoveUp = false;
-    var p2MoveDown = false;
+    p2.moveLeft = false;
+    p2.moveRight = false;
+    p2.moveLeft = false;
+    p2.moveLeft = false;*/
+
+    var Player = function Player() {
+        //player object properties
+        this.moveLeft = false;
+        this.moveRight = false;
+        this.moveUp = false;
+        this.moveDown = false;
+    };
+
+    //var p1 = new Player();
+/*
+    var p1.moveRight = false;
+    var p1.moveUp = false;
+    var p1.moveDown = false;
+
+    var p2.moveLeft = false;
+    var p2.moveRight = false;
+    var p2.moveUp = false;
+    var p2.moveDown = false;
+*/
 
     //create startGame for setInterval() in initDeploid()
     var startGame = null;
@@ -44,35 +65,35 @@ $(function(){
     $(g2).css({'left': $(p2).position().left, 'top': $(p2).position().top});
 
     //player 1 key listeners
-    $(body).keydown(function(p1) {
-        var p1k = p1.keyCode;
-        if (p1k==65) {p1MoveLeft = true}
-        if (p1k==68) {p1MoveRight = true}
-        if (p1k==87) {p1MoveUp = true}
-        if (p1k==83) {p1MoveDown = true}
+    $(body).keydown(function(e) {
+        var p1k = e.keyCode;
+        if (p1k==65) {p1.moveLeft = true}
+        if (p1k==68) {p1.moveRight = true}
+        if (p1k==87) {p1.moveUp = true}
+        if (p1k==83) {p1.moveDown = true}
     });
-    $(body).keyup(function(p1) {
-        var p1k = p1.keyCode;
-        if (p1k==65) {p1MoveLeft = false}
-        if (p1k==68) {p1MoveRight = false}
-        if (p1k==87) {p1MoveUp = false}
-        if (p1k==83) {p1MoveDown = false}
+    $(body).keyup(function(e) {
+        var p1k = e.keyCode;
+        if (p1k==65) {p1.moveLeft = false}
+        if (p1k==68) {p1.moveRight = false}
+        if (p1k==87) {p1.moveUp = false}
+        if (p1k==83) {p1.moveDown = false}
     });
 
     //player 2 key listeners
-    $(body).keydown(function(p2) {
-        var p2k = p2.keyCode;
-        if (p2k==37) {p2MoveLeft = true;}
-        if (p2k==39) {p2MoveRight = true;}
-        if (p2k==38) {p2MoveUp = true;}
-        if (p2k==40) {p2MoveDown = true;}
+    $(body).keydown(function(e) {
+        var p2k = e.keyCode;
+        if (p2k==37) {p2.moveLeft = true;}
+        if (p2k==39) {p2.moveRight = true;}
+        if (p2k==38) {p2.moveUp = true;}
+        if (p2k==40) {p2.moveDown = true;}
     });
-    $(body).keyup(function(p2) {
-        var p2k = p2.keyCode;
-        if (p2k==37) {p2MoveLeft = false;}
-        if (p2k==39) {p2MoveRight = false;}
-        if (p2k==38) {p2MoveUp = false;}
-        if (p2k==40) {p2MoveDown = false;}
+    $(body).keyup(function(e) {
+        var p2k = e.keyCode;
+        if (p2k==37) {p2.moveLeft = false;}
+        if (p2k==39) {p2.moveRight = false;}
+        if (p2k==38) {p2.moveUp = false;}
+        if (p2k==40) {p2.moveDown = false;}
     });
 
     function alignLine() {
@@ -164,10 +185,10 @@ $(function(){
 
     function tick() {
         var p1Moved = 0;
-        if(p1MoveLeft) {$(g1).css({'left': '-=' + speed}); p1Moved = 1}
-        if(p1MoveRight) {$(g1).css({'left': '+=' + speed}); p1Moved = 1}
-        if(p1MoveUp) {$(g1).css({'top': '-=' + speed}); p1Moved = 1}
-        if(p1MoveDown) {$(g1).css({'top': '+=' + speed}); p1Moved = 1}
+        if(p1.moveLeft) {$(g1).css({'left': '-=' + speed}); p1Moved = 1}
+        if(p1.moveRight) {$(g1).css({'left': '+=' + speed}); p1Moved = 1}
+        if(p1.moveUp) {$(g1).css({'top': '-=' + speed}); p1Moved = 1}
+        if(p1.moveDown) {$(g1).css({'top': '+=' + speed}); p1Moved = 1}
         if(p1Moved) {
             if(!checkOutOfBounds($(g1), $(diploid))) {
                 $(p1).css({'top': $(g1).position().top, 'left': $(g1).position().left});
@@ -177,10 +198,10 @@ $(function(){
         }
 
         var p2Moved = 0;
-        if(p2MoveLeft) {$(g2).css({'left': '-='+speed}); p2Moved = 1}
-        if(p2MoveRight) {$(g2).css({'left': '+=' + speed}); p2Moved = 1}
-        if(p2MoveUp) {$(g2).css({'top': '-=' + speed}); p2Moved = 1}
-        if(p2MoveDown) {$(g2).css({'top': '+=' + speed}); p2Moved = 1}
+        if(p2.moveLeft) {$(g2).css({'left': '-='+speed}); p2Moved = 1}
+        if(p2.moveRight) {$(g2).css({'left': '+=' + speed}); p2Moved = 1}
+        if(p2.moveUp) {$(g2).css({'top': '-=' + speed}); p2Moved = 1}
+        if(p2.moveDown) {$(g2).css({'top': '+=' + speed}); p2Moved = 1}
         if(p2Moved) {
             if(!checkOutOfBounds($(g2), $(diploid))) {
                 $(p2).css({'top': $(g2).position().top, 'left': $(g2).position().left});
@@ -196,7 +217,7 @@ $(function(){
             console.log('Player 2 Collided with a block!');
         }
         alignLine();
-        moveTestBlock();
+        //moveTestBlock();
     }
 
     //initialize the game
