@@ -10,10 +10,10 @@ $(function(){
 
     //line
     var line = $('#line');
-    var lineP1X = null;
-    var lineP1Y = null;
-    var lineP2X = null;
-    var lineP2Y = null;
+    var lineX1 = null;
+    var lineY1 = null;
+    var lineX2 = null;
+    var lineY2 = null;
     var lineP1 = [];
     var lineP2 = [];
 
@@ -75,18 +75,23 @@ $(function(){
         p1.getCenter();
         p2.getCenter();
 
-        $(line).attr('x1', p1.centerX);
-        $(line).attr('y1',p1.centerY);
-        $(line).attr('x2', p2.centerX);
-        $(line).attr('y2',p2.centerY);
+        //set line segment coordinates based on updated player center points
+        $(line).attr({
+            'x1': p1.centerX,
+            'y1': p1.centerY,
+            'x2': p2.centerX,
+            'y2': p2.centerY
+        });
 
-        lineP1X = $(line).attr('x1');
-        lineP1Y = $(line).attr('y1');
-        lineP2X = $(line).attr('x2');
-        lineP2Y = $(line).attr('y2');
+        //set variables for updated line x/y attributes
+        lineX1 = $(line).attr('x1');
+        lineY1 = $(line).attr('y1');
+        lineX2 = $(line).attr('x2');
+        lineY2 = $(line).attr('y2');
 
-        lineP1 = [lineP1X,lineP1Y];
-        lineP2 = [lineP2X,lineP2Y];
+        // X/Y array for each line point
+        lineP1 = [lineX1,lineY1];
+        lineP2 = [lineX2,lineY2];
     }
 
     function checkOutOfBounds(obj,bounds) {
@@ -122,7 +127,7 @@ $(function(){
 
     /********** Collision detection for line **********/
     function checkCorners(x,y) {
-        return (((lineP2Y - lineP1Y) * x) + ((lineP1X - lineP2X) * y)) + ((lineP2X * lineP1Y) - (lineP1X * lineP2Y));
+        return (((lineY2 - lineY1) * x) + ((lineX1 - lineX2) * y)) + ((lineX2 * lineY1) - (lineX1 * lineY2));
     }
     function checkIntersection() {
         var cornerCheckTL = checkCorners(blockBLX,blockBRY);
@@ -132,7 +137,7 @@ $(function(){
         if((cornerCheckBL < 0 && cornerCheckBR < 0 && cornerCheckTL < 0 && cornerCheckTR < 0) || (cornerCheckBL > 0 && cornerCheckBR > 0 && cornerCheckTL > 0 && cornerCheckTR > 0)) {
             console.log('no intersection :(');
             return false;
-        } else if((lineP1X > blockTRX && lineP2X > blockTRX) || (lineP1X < blockBLX && lineP2X < blockBLX) || ((lineP1Y > blockBRY && lineP2Y > blockBRY)) || (lineP1Y < blockTLY && lineP2Y < blockTLY)) {
+        } else if((lineX1 > blockTRX && lineX2 > blockTRX) || (lineX1 < blockBLX && lineX2 < blockBLX) || ((lineY1 > blockBRY && lineY2 > blockBRY)) || (lineY1 < blockTLY && lineY2 < blockTLY)) {
             console.log('no intersection :(');
             return false;
         } else {
