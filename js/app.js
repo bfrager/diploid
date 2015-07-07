@@ -20,64 +20,45 @@ $(function(){
     //global speed
     var speed = 3;
 
-    //build ghost players to check for move validity before moving real players:
-    /*diploid.prepend("<div id='ghost1' class='ghost'></div>");
-    diploid.prepend("<div id='ghost2' class='ghost'></div>");*/
+    var Player = function Player(selectorID,ghostID,lKeyCode,rKeyCode,uKeyCode,dKeyCode) {
+        var player = this;
+        player.sel = $('#' + selectorID);
 
-    var Player = function Player(selectorID,ghostID) {
-        this.sel = $('#' + selectorID);
-        this.moveLeft = false;
-        this.moveRight = false;
-        this.moveUp = false;
-        this.moveDown = false;
+        //is player currently trying to move?
+        player.moveLeft = false;
+        player.moveRight = false;
+        player.moveUp = false;
+        player.moveDown = false;
+
+        //create ghost divs for each player to 'move ahead' and see if moves are 'valid'
         diploid.prepend('<div id="'+ghostID+'" class="ghost"></div>');
-        this.g = $('#'+ghostID);
-        console.log($(this.g));
+        player.g = $('#'+ghostID);
+
+        //player control key bindings
+        $(body).keydown(function(e) {
+            var p1k = e.keyCode;
+            if (p1k==lKeyCode) {player.moveLeft = true}
+            if (p1k==rKeyCode) {player.moveRight = true}
+            if (p1k==uKeyCode) {player.moveUp = true}
+            if (p1k==dKeyCode) {player.moveDown = true}
+        });
+        $(body).keyup(function(e) {
+            var p1k = e.keyCode;
+            if (p1k==lKeyCode) {player.moveLeft = false}
+            if (p1k==rKeyCode) {player.moveRight = false}
+            if (p1k==uKeyCode) {player.moveUp = false}
+            if (p1k==dKeyCode) {player.moveDown = false}
+        });
     };
 
-    var p1 = new Player('p1',"ghost1");
-    var p2 = new Player('p2','ghost2');
+    var p1 = new Player('p1',"ghost1",65,68,87,83);
+    var p2 = new Player('p2','ghost2',37,39,38,40);
 
     //create startGame for setInterval() in initDeploid()
     var startGame = null;
 
-
-    /*var g1 = $('#ghost1');
-    var g2 = $('#ghost2');*/
     $(p1.g).css({'left': $(p1.sel).position().left, 'top': $(p1.sel).position().top});
     $(p2.g).css({'left': $(p2.sel).position().left, 'top': $(p2.sel).position().top});
-
-    //player 1 key listeners
-    $(body).keydown(function(e) {
-        var p1k = e.keyCode;
-        if (p1k==65) {p1.moveLeft = true}
-        if (p1k==68) {p1.moveRight = true}
-        if (p1k==87) {p1.moveUp = true}
-        if (p1k==83) {p1.moveDown = true}
-    });
-    $(body).keyup(function(e) {
-        var p1k = e.keyCode;
-        if (p1k==65) {p1.moveLeft = false}
-        if (p1k==68) {p1.moveRight = false}
-        if (p1k==87) {p1.moveUp = false}
-        if (p1k==83) {p1.moveDown = false}
-    });
-
-    //player 2 key listeners
-    $(body).keydown(function(e) {
-        var p2k = e.keyCode;
-        if (p2k==37) {p2.moveLeft = true;}
-        if (p2k==39) {p2.moveRight = true;}
-        if (p2k==38) {p2.moveUp = true;}
-        if (p2k==40) {p2.moveDown = true;}
-    });
-    $(body).keyup(function(e) {
-        var p2k = e.keyCode;
-        if (p2k==37) {p2.moveLeft = false;}
-        if (p2k==39) {p2.moveRight = false;}
-        if (p2k==38) {p2.moveUp = false;}
-        if (p2k==40) {p2.moveDown = false;}
-    });
 
     function alignLine() {
         var player1CenterX = (parseInt($(p1.sel).css("left")) + (parseInt($(p1.sel).width()) / 2 ));
@@ -97,11 +78,6 @@ $(function(){
 
         lineP1 = [lineP1X,lineP1Y];
         lineP2 = [lineP2X,lineP2Y];
-
-        //length of line:
-        /* var lineW = Math.abs($(line).attr('x1') - $(line).attr('x2'));
-        var lineH = Math.abs($(line).attr('y1') - $(line).attr('y2'));
-        var lineLength = Math.round(Math.sqrt((lineW * lineW) + (lineH * lineH)));*/
     }
 
     function checkOutOfBounds(obj,bounds) {
