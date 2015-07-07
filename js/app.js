@@ -1,8 +1,7 @@
 $(function(){
     var body = $('body');
     var diploid = $('#diploid');
-    var p1 = $('#p1');
-    var p2 = $('#p2');
+
     var testBlock = $('#testBlock');
     var blockBLX = null;
     var blockTLY = null;
@@ -21,48 +20,32 @@ $(function(){
     //global speed
     var speed = 3;
 
-    //player move states:
-    //var p1.moveLeft = false;
-    /*p1.moveLeft = false;
-    p1.moveRight = false;
-    p1.moveUp = false;
-    p1.moveDown = false;
+    //build ghost players to check for move validity before moving real players:
+    /*diploid.prepend("<div id='ghost1' class='ghost'></div>");
+    diploid.prepend("<div id='ghost2' class='ghost'></div>");*/
 
-    p2.moveLeft = false;
-    p2.moveRight = false;
-    p2.moveLeft = false;
-    p2.moveLeft = false;*/
-
-    var Player = function Player() {
-        //player object properties
+    var Player = function Player(selectorID,ghostID) {
+        this.sel = $('#' + selectorID);
         this.moveLeft = false;
         this.moveRight = false;
         this.moveUp = false;
         this.moveDown = false;
+        diploid.prepend('<div id="'+ghostID+'" class="ghost"></div>');
+        this.g = $('#'+ghostID);
+        console.log($(this.g));
     };
 
-    //var p1 = new Player();
-/*
-    var p1.moveRight = false;
-    var p1.moveUp = false;
-    var p1.moveDown = false;
-
-    var p2.moveLeft = false;
-    var p2.moveRight = false;
-    var p2.moveUp = false;
-    var p2.moveDown = false;
-*/
+    var p1 = new Player('p1',"ghost1");
+    var p2 = new Player('p2','ghost2');
 
     //create startGame for setInterval() in initDeploid()
     var startGame = null;
 
-    //build ghost players to check for move validity before moving real players:
-    diploid.prepend("<div id='ghost1' class='ghost'></div>");
-    diploid.prepend("<div id='ghost2' class='ghost'></div>");
-    var g1 = $('#ghost1');
-    var g2 = $('#ghost2');
-    $(g1).css({'left': $(p1).position().left, 'top': $(p1).position().top});
-    $(g2).css({'left': $(p2).position().left, 'top': $(p2).position().top});
+
+    /*var g1 = $('#ghost1');
+    var g2 = $('#ghost2');*/
+    $(p1.g).css({'left': $(p1.sel).position().left, 'top': $(p1.sel).position().top});
+    $(p2.g).css({'left': $(p2.sel).position().left, 'top': $(p2.sel).position().top});
 
     //player 1 key listeners
     $(body).keydown(function(e) {
@@ -97,10 +80,10 @@ $(function(){
     });
 
     function alignLine() {
-        var player1CenterX = (parseInt($(p1).css("left")) + (parseInt($(p1).width()) / 2 ));
-        var player1CenterY = (parseInt($(p1).css("top")) + (parseInt($(p1).height()) / 2 ));
-        var player2CenterX = (parseInt($(p2).css("left")) + (parseInt($(p2).width()) / 2 ));
-        var player2CenterY = (parseInt($(p2).css("top")) + (parseInt($(p2).height()) / 2 ));
+        var player1CenterX = (parseInt($(p1.sel).css("left")) + (parseInt($(p1.sel).width()) / 2 ));
+        var player1CenterY = (parseInt($(p1.sel).css("top")) + (parseInt($(p1.sel).height()) / 2 ));
+        var player2CenterX = (parseInt($(p2.sel).css("left")) + (parseInt($(p2.sel).width()) / 2 ));
+        var player2CenterY = (parseInt($(p2.sel).css("top")) + (parseInt($(p2.sel).height()) / 2 ));
 
         $(line).attr('x1', player1CenterX);
         $(line).attr('y1',player1CenterY);
@@ -185,39 +168,39 @@ $(function(){
 
     function tick() {
         var p1Moved = 0;
-        if(p1.moveLeft) {$(g1).css({'left': '-=' + speed}); p1Moved = 1}
-        if(p1.moveRight) {$(g1).css({'left': '+=' + speed}); p1Moved = 1}
-        if(p1.moveUp) {$(g1).css({'top': '-=' + speed}); p1Moved = 1}
-        if(p1.moveDown) {$(g1).css({'top': '+=' + speed}); p1Moved = 1}
+        if(p1.moveLeft) {$(p1.g).css({'left': '-=' + speed}); p1Moved = 1}
+        if(p1.moveRight) {$(p1.g).css({'left': '+=' + speed}); p1Moved = 1}
+        if(p1.moveUp) {$(p1.g).css({'top': '-=' + speed}); p1Moved = 1}
+        if(p1.moveDown) {$(p1.g).css({'top': '+=' + speed}); p1Moved = 1}
         if(p1Moved) {
-            if(!checkOutOfBounds($(g1), $(diploid))) {
-                $(p1).css({'top': $(g1).position().top, 'left': $(g1).position().left});
+            if(!checkOutOfBounds($(p1.g), $(diploid))) {
+                $(p1.sel).css({'top': $(p1.g).position().top, 'left': $(p1.g).position().left});
             } else {
-                $(g1).css({'top': $(p1).position().top, 'left': $(p1).position().left});
+                $(p1.g).css({'top': $(p1.sel).position().top, 'left': $(p1.sel).position().left});
             }
         }
 
         var p2Moved = 0;
-        if(p2.moveLeft) {$(g2).css({'left': '-='+speed}); p2Moved = 1}
-        if(p2.moveRight) {$(g2).css({'left': '+=' + speed}); p2Moved = 1}
-        if(p2.moveUp) {$(g2).css({'top': '-=' + speed}); p2Moved = 1}
-        if(p2.moveDown) {$(g2).css({'top': '+=' + speed}); p2Moved = 1}
+        if(p2.moveLeft) {$(p2.g).css({'left': '-='+speed}); p2Moved = 1}
+        if(p2.moveRight) {$(p2.g).css({'left': '+=' + speed}); p2Moved = 1}
+        if(p2.moveUp) {$(p2.g).css({'top': '-=' + speed}); p2Moved = 1}
+        if(p2.moveDown) {$(p2.g).css({'top': '+=' + speed}); p2Moved = 1}
         if(p2Moved) {
-            if(!checkOutOfBounds($(g2), $(diploid))) {
-                $(p2).css({'top': $(g2).position().top, 'left': $(g2).position().left});
+            if(!checkOutOfBounds($(p2.g), $(diploid))) {
+                $(p2.sel).css({'top': $(p2.g).position().top, 'left': $(p2.g).position().left});
             } else {
-                $(g2).css({'top': $(p2).position().top, 'left': $(p2).position().left});
+                $(p2.g).css({'top': $(p2.sel).position().top, 'left': $(p2.sel).position().left});
             }
         }
 
-        if(checkCollision($(p1),$(testBlock))) {
+        if(checkCollision($(p1.sel),$(testBlock))) {
             console.log('Player 1 collided with a block!');
         }
-        if(checkCollision($(p2),$(testBlock))) {
+        if(checkCollision($(p2.sel),$(testBlock))) {
             console.log('Player 2 Collided with a block!');
         }
         alignLine();
-        //moveTestBlock();
+        moveTestBlock();
     }
 
     //initialize the game
