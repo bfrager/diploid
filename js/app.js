@@ -34,6 +34,8 @@ $(function(){
         diploid.prepend('<div id="'+ghostID+'" class="ghost"></div>');
         player.g = $('#'+ghostID);
 
+        $(player.g).css({'left': $(player.sel).position().left, 'top': $(player.sel).position().top});
+
         //player control key bindings
         $(body).keydown(function(e) {
             var p1k = e.keyCode;
@@ -56,9 +58,6 @@ $(function(){
 
     //create startGame for setInterval() in initDeploid()
     var startGame = null;
-
-    $(p1.g).css({'left': $(p1.sel).position().left, 'top': $(p1.sel).position().top});
-    $(p2.g).css({'left': $(p2.sel).position().left, 'top': $(p2.sel).position().top});
 
     function alignLine() {
         var player1CenterX = (parseInt($(p1.sel).css("left")) + (parseInt($(p1.sel).width()) / 2 ));
@@ -196,4 +195,3 @@ $(function(){
     });
     initDiploid();
 });
-
