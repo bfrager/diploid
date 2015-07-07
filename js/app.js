@@ -125,10 +125,10 @@ $(function(){
         return ((right1 > left2 && (bottom1 > top2 && top1 < bottom2)) && (left1 < right2 && (top1 < bottom2 && bottom1 > top2)));
     }
 
-    /********** Collision detection for line **********/
     function checkCorners(x,y) {
         return (((lineY2 - lineY1) * x) + ((lineX1 - lineX2) * y)) + ((lineX2 * lineY1) - (lineX1 * lineY2));
     }
+
     function checkIntersection() {
         var cornerCheckTL = checkCorners(blockBLX,blockBRY);
         var cornerCheckTR = checkCorners(blockTRX,blockBRY);
@@ -144,7 +144,6 @@ $(function(){
             console.log('WE HAVE INTERSECTION!!!');
         }
     }
-    /********************/
 
     function moveTestBlock() {
         $(testBlock).css({'top': $(testBlock).position().top -.5});
@@ -156,32 +155,24 @@ $(function(){
         checkIntersection();
     }
 
-    function tick() {
-        var p1Moved = 0;
-        if(p1.moveLeft) {$(p1.g).css({'left': '-=' + speed}); p1Moved = 1}
-        if(p1.moveRight) {$(p1.g).css({'left': '+=' + speed}); p1Moved = 1}
-        if(p1.moveUp) {$(p1.g).css({'top': '-=' + speed}); p1Moved = 1}
-        if(p1.moveDown) {$(p1.g).css({'top': '+=' + speed}); p1Moved = 1}
-        if(p1Moved) {
-            if(!checkOutOfBounds($(p1.g), $(diploid))) {
-                $(p1.sel).css({'top': $(p1.g).position().top, 'left': $(p1.g).position().left});
+    function movePlayer(player) {
+        var pMoved = 0;
+        if(player.moveLeft) {$(player.g).css({'left': '-=' + speed}); pMoved = 1}
+        if(player.moveRight) {$(player.g).css({'left': '+=' + speed}); pMoved = 1}
+        if(player.moveUp) {$(player.g).css({'top': '-=' + speed}); pMoved = 1}
+        if(player.moveDown) {$(player.g).css({'top': '+=' + speed}); pMoved = 1}
+        if(pMoved) {
+            if(!checkOutOfBounds($(player.g), $(diploid))) {
+                $(player.sel).css({'top': $(player.g).position().top, 'left': $(player.g).position().left});
             } else {
-                $(p1.g).css({'top': $(p1.sel).position().top, 'left': $(p1.sel).position().left});
+                $(player.g).css({'top': $(player.sel).position().top, 'left': $(player.sel).position().left});
             }
         }
+    }
 
-        var p2Moved = 0;
-        if(p2.moveLeft) {$(p2.g).css({'left': '-='+speed}); p2Moved = 1}
-        if(p2.moveRight) {$(p2.g).css({'left': '+=' + speed}); p2Moved = 1}
-        if(p2.moveUp) {$(p2.g).css({'top': '-=' + speed}); p2Moved = 1}
-        if(p2.moveDown) {$(p2.g).css({'top': '+=' + speed}); p2Moved = 1}
-        if(p2Moved) {
-            if(!checkOutOfBounds($(p2.g), $(diploid))) {
-                $(p2.sel).css({'top': $(p2.g).position().top, 'left': $(p2.g).position().left});
-            } else {
-                $(p2.g).css({'top': $(p2.sel).position().top, 'left': $(p2.sel).position().left});
-            }
-        }
+    function tick() {
+        movePlayer(p1);
+        movePlayer(p2);
 
         if(checkCollision($(p1.sel),$(testBlock))) {
             console.log('Player 1 collided with a block!');
