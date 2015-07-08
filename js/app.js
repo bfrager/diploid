@@ -18,62 +18,64 @@ $(function(){
     var blockArray = [];
 
     var grid = 75;
+    var blockCount = 0;
+    var blockSpeed = .3;
 
     var Player = function(selectorID,ghostID,lKeyCode,rKeyCode,uKeyCode,dKeyCode) {
-        var player = this;
-        player.sel = $('#' + selectorID);
+        var p = this;
+        p.sel = $('#' + selectorID);
 
         //
-        player.getCenter = function() {
-            player.centerX = (parseInt($(player.sel).css("left")) + (parseInt($(player.sel).width()) / 2 ));
-            player.centerY = (parseInt($(player.sel).css("top")) + (parseInt($(player.sel).height()) / 2 ));
+        p.getCenter = function() {
+            p.centerX = (parseInt($(p.sel).css("left")) + (parseInt($(p.sel).width()) / 2 ));
+            p.centerY = (parseInt($(p.sel).css("top")) + (parseInt($(p.sel).height()) / 2 ));
         };
 
         //is player currently trying to move?
-        player.moveLeft = false;
-        player.moveRight = false;
-        player.moveUp = false;
-        player.moveDown = false;
+        p.moveLeft = false;
+        p.moveRight = false;
+        p.moveUp = false;
+        p.moveDown = false;
 
         //create ghost divs for each player to 'move ahead' and see if moves are 'valid'
         diploid.prepend('<div id="' + ghostID + '" class="ghost"></div>');
-        player.g = $('#' + ghostID);
+        p.g = $('#' + ghostID);
 
-        $(player.g).css({'left': $(player.sel).position().left, 'top': $(player.sel).position().top});
+        $(p.g).css({'left': $(p.sel).position().left, 'top': $(p.sel).position().top});
 
         //player control key bindings
         $(body).keydown(function(e) {
             var p1k = e.keyCode;
-            if (p1k==lKeyCode) {player.moveLeft = true}
-            if (p1k==rKeyCode) {player.moveRight = true}
-            if (p1k==uKeyCode) {player.moveUp = true}
-            if (p1k==dKeyCode) {player.moveDown = true}
+            if (p1k==lKeyCode) {p.moveLeft = true}
+            if (p1k==rKeyCode) {p.moveRight = true}
+            if (p1k==uKeyCode) {p.moveUp = true}
+            if (p1k==dKeyCode) {p.moveDown = true}
         });
         $(body).keyup(function(e) {
             var p1k = e.keyCode;
-            if (p1k==lKeyCode) {player.moveLeft = false}
-            if (p1k==rKeyCode) {player.moveRight = false}
-            if (p1k==uKeyCode) {player.moveUp = false}
-            if (p1k==dKeyCode) {player.moveDown = false}
+            if (p1k==lKeyCode) {p.moveLeft = false}
+            if (p1k==rKeyCode) {p.moveRight = false}
+            if (p1k==uKeyCode) {p.moveUp = false}
+            if (p1k==dKeyCode) {p.moveDown = false}
         });
 
-        player.move = function() {
+        p.move = function() {
             var pMoved = 0;
-            if(player.moveLeft) {$(player.g).css({'left': '-=' + speed}); pMoved = 1}
-            if(player.moveRight) {$(player.g).css({'left': '+=' + speed}); pMoved = 1}
-            if(player.moveUp) {$(player.g).css({'top': '-=' + speed}); pMoved = 1}
-            if(player.moveDown) {$(player.g).css({'top': '+=' + speed}); pMoved = 1}
+            if(p.moveLeft) {$(p.g).css({'left': '-=' + speed}); pMoved = 1}
+            if(p.moveRight) {$(p.g).css({'left': '+=' + speed}); pMoved = 1}
+            if(p.moveUp) {$(p.g).css({'top': '-=' + speed}); pMoved = 1}
+            if(p.moveDown) {$(p.g).css({'top': '+=' + speed}); pMoved = 1}
             if(pMoved) {
-                if(!checkOutOfBounds($(player.g), $(diploid))) {
-                    $(player.sel).css({'top': $(player.g).position().top, 'left': $(player.g).position().left});
+                if(!checkOutOfBounds($(p.g), $(diploid))) {
+                    $(p.sel).css({'top': $(p.g).position().top, 'left': $(p.g).position().left});
                 } else {
-                    $(player.g).css({'top': $(player.sel).position().top, 'left': $(player.sel).position().left});
+                    $(p.g).css({'top': $(p.sel).position().top, 'left': $(p.sel).position().left});
                 }
             }
         };
 
         //add this player to the player array so that both players can be targeted together quickly
-        playerArray.push(player);
+        playerArray.push(p);
     };
 
     var p1 = new Player('p1','ghost1',65,68,87,83);
@@ -81,63 +83,75 @@ $(function(){
 
     //block object
     var Block = function(selectorID) {
-        var block = this;
-        block.sel = '#' + selectorID;
+        var b = this;
+        b.sel = '#' + selectorID;
 
-        block.w = Math.round(Math.random() * grid) + grid;
-        block.h = Math.round(Math.random() * grid) + grid;
+        b.w = Math.round(Math.random() * grid) + grid;
+        b.h = Math.round(Math.random() * grid) + grid;
 
         $(diploid).prepend('<div id="' + selectorID + '" class="block"></div>');
-        $(block.sel).css({'left': (Math.random() * $(diploid).width())});
-        $(block.sel).css('width', block.w);
-        $(block.sel).css('height', block.h);
-        $(block.sel).css('top', ((Math.random() * $(diploid).height()) + $(diploid).height()));
+        $(b.sel).css({'left': (Math.random() * $(diploid).width())});
+        $(b.sel).css('width', b.w);
+        $(b.sel).css('height', b.h);
+        $(b.sel).css('top', ((Math.random() * $(diploid).height()) + $(diploid).height()));
 
         //each block object has it's own intersect detection
-        block.checkCorners = function(x,y) {
+        b.checkCorners = function(x,y) {
             return (((lineY2 - lineY1) * x) + ((lineX1 - lineX2) * y)) + ((lineX2 * lineY1) - (lineX1 * lineY2));
         };
 
-        block.moveBlock = function() {
-            block.BLX = $(block.sel).position().left;
-            block.TLY =  $(block.sel).position().top;
-            block.TRX = $(block.sel).position().left + $(block.sel).width();
-            block.BRY = $(block.sel).position().top + $(block.sel).height();
+        b.moveBlock = function() {
+            b.BLX = $(b.sel).position().left;
+            b.TLY =  $(b.sel).position().top;
+            b.TRX = $(b.sel).position().left + $(b.sel).width();
+            b.BRY = $(b.sel).position().top + $(b.sel).height();
 
-            block.checkIntersection();
-            moveBlockUp(block);
+            b.checkIntersection();
+            if(!($(b.sel).position().top <= ($(b.sel).height() * -1))) {
+                moveBlockUp(b);
+            } else {
+
+            }
+
         };
 
-        block.checkIntersection = function() {
-            block.cornerCheckTL = block.checkCorners(block.BLX,block.BRY);
-            block.cornerCheckTR = block.checkCorners(block.TRX,block.BRY);
-            block.cornerCheckBL = block.checkCorners(block.BLX,block.TLY);
-            block.cornerCheckBR = block.checkCorners(block.TRX,block.TLY);
+        b.checkIntersection = function() {
+            b.cornerCheckTL = b.checkCorners(b.BLX,b.BRY);
+            b.cornerCheckTR = b.checkCorners(b.TRX,b.BRY);
+            b.cornerCheckBL = b.checkCorners(b.BLX,b.TLY);
+            b.cornerCheckBR = b.checkCorners(b.TRX,b.TLY);
 
-            if((block.cornerCheckBL < 0 && block.cornerCheckBR < 0 && block.cornerCheckTL < 0 && block.cornerCheckTR < 0) || (block.cornerCheckBL > 0 && block.cornerCheckBR > 0 && block.cornerCheckTL > 0 && block.cornerCheckTR > 0)) {
+            if((b.cornerCheckBL < 0 && b.cornerCheckBR < 0 && b.cornerCheckTL < 0 && b.cornerCheckTR < 0) || (b.cornerCheckBL > 0 && b.cornerCheckBR > 0 && b.cornerCheckTL > 0 && b.cornerCheckTR > 0)) {
                 return false;
-            } else if((lineX1 > block.TRX && lineX2 > block.TRX) || (lineX1 < block.BLX && lineX2 < block.BLX) || ((lineY1 > block.BRY && lineY2 > block.BRY)) || (lineY1 < block.TLY && lineY2 < block.TLY)) {
+            } else if((lineX1 > b.TRX && lineX2 > b.TRX) || (lineX1 < b.BLX && lineX2 < b.BLX) || ((lineY1 > b.BRY && lineY2 > b.BRY)) || (lineY1 < b.TLY && lineY2 < b.TLY)) {
                 return false;
             } else {
                 console.log('WE HAVE INTERSECTION!!!');
             }
         };
-        blockArray.push(block);
+        blockArray.push(b);
     };
+
+    function newBlock() {
+        blockCount += 1;
+        var blockID = 'block' + blockCount;
+        var block = new Block(blockID);
+    }
 
     function generateBlocks(num) {
         for(i = 1; i <= num; i += 1) {
-            var blockID = 'block' + i;
-            var block = new Block(blockID);
+            /*var blockID = 'block' + i;
+            var block = new Block(blockID);*/
+            newBlock();
         }
     }
 
     function moveBlockUp(who) {
-        $(who.sel).css('top', '-=.3');
+        $(who.sel).css('top', '-=' + blockSpeed);
     }
 
 
-generateBlocks(10);
+    generateBlocks(20);
     //var block1 = new Block('newBlock');
     console.log('Number of blocks: ' + blockArray.length);
 
