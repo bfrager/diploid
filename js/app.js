@@ -161,17 +161,18 @@ $(function(){
 
         };
 
-        blockArray.push(b);
+
         b.tick = setInterval(b.moveBlock,10);
         b.regen = function() {
             //console.log(blockArray);
-            blockArray.pop();
+            blockArray.shift();
             clearInterval(b.tick);
             b.alive = false;
             delete this;
             newBlock();
             $(b.sel).remove();
         };
+        blockArray.push(b);
     };
 
     function newBlock() {
@@ -262,6 +263,7 @@ $(function(){
             for(var i = 0; i < blockArray.length; i += 1) {
                 clearInterval(blockArray[i].tick);
             }
+            console.log(blockArray);
         }
     });
     initDiploid();
