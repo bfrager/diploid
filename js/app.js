@@ -2,6 +2,8 @@ $(function(){
     var body = $('body');
     var diploid = $('#diploid');
 
+    var paused = false;
+
     //line
     var line = $('#line');
     var lineX1 = null;
@@ -20,7 +22,6 @@ $(function(){
     var grid = 75;
     var blockAmount = 15;
     var blockCount = 0;
-    //var blockSpeed = .3;
     var blockSpeed = 1;
 
     var Player = function(selectorID,ghostID,lKeyCode,rKeyCode,uKeyCode,dKeyCode) {
@@ -98,7 +99,6 @@ $(function(){
         $(b.sel).css('width', b.w);
         $(b.sel).css('height', b.h);
         $(b.sel).css('top', ($(diploid).height() + (Math.random() * $(diploid).height())));
-        //$(b.sel).css('top', 300);
 
         //each block object has it's own intersect detection
         b.checkCorners = function(x,y) {
@@ -118,7 +118,7 @@ $(function(){
             } else if((lineX1 > b.TRX && lineX2 > b.TRX) || (lineX1 < b.BLX && lineX2 < b.BLX) || ((lineY1 > b.BRY && lineY2 > b.BRY)) || (lineY1 < b.TLY && lineY2 < b.TLY)) {
                 return false;
             } else {
-                //console.log('WE HAVE INTERSECTION!!!');
+                //do something when line gets interrupted
             }
         };
 
@@ -137,30 +137,30 @@ $(function(){
         };
 
         b.moveBlock = function() {
-            b.BLX = $(b.sel).position().left;
-            b.TLY =  $(b.sel).position().top;
-            b.TRX = $(b.sel).position().left + $(b.sel).width();
-            b.BRY = $(b.sel).position().top + $(b.sel).height();
+            if(!paused) {
+                b.BLX = $(b.sel).position().left;
+                b.TLY =  $(b.sel).position().top;
+                b.TRX = $(b.sel).position().left + $(b.sel).width();
+                b.BRY = $(b.sel).position().top + $(b.sel).height();
 
-            b.checkIntersection();
+                b.checkIntersection();
 
-            for(var p = 0; p < playerArray.length; p += 1){
-                if(b.checkCollision($(playerArray[p].sel), $(b.sel))) {
-                    //console.log(playerArray[p].name);
+                for(var p = 0; p < playerArray.length; p += 1){
+                    if(b.checkCollision($(playerArray[p].sel), $(b.sel))) {
+                        //console.log(playerArray[p].name);
+                    }
+                }
+
+                if(b.alive == true) {
+                    if(!($(b.sel).position().top <= ($(b.sel).height() * -1))) {
+                        moveBlockUp(b);
+                        //console.log(b);
+                    } else {
+                        b.regen();
+                    }
                 }
             }
-
-            if(b.alive == true) {
-                if(!($(b.sel).position().top <= ($(b.sel).height() * -1))) {
-                    moveBlockUp(b);
-                    //console.log(b);
-                } else {
-                    b.regen();
-                }
-            }
-
         };
-
 
         b.tick = setInterval(b.moveBlock,10);
         b.regen = function() {
@@ -191,11 +191,6 @@ $(function(){
     function moveBlockUp(who) {
         $(who.sel).css('top', '-=' + blockSpeed);
     }
-
-
-
-    //console.log('Number of blocks: ' + blockArray.length);
-    //console.log(blockArray);
 
     //create startGame for setInterval() in initDeploid()
     var startGame = null;
@@ -239,10 +234,12 @@ $(function(){
     }
 
     function tick() {
-        for(var i = 0; i < playerArray.length; i += 1) {
-            playerArray[i].move();
+        if(!paused) {
+            for(var i = 0; i < playerArray.length; i += 1) {
+                playerArray[i].move();
+            }
+            alignLine();
         }
-        alignLine();
     }
 
     //initialize the game
@@ -252,18 +249,16 @@ $(function(){
         startGame = setInterval(tick, 10);
     }
 
-    //stop game with spacebar
+    //pause/unpause game with spacebar
     $(body).keydown(function(s){
         if(s.keyCode == 32){
             // without scrolling the page down
             event.preventDefault();
-            clearInterval(startGame);
-            //console.log('Game Stopped!');
-
-            for(var i = 0; i < blockArray.length; i += 1) {
-                clearInterval(blockArray[i].tick);
+            if(!paused) {
+                paused = true;
+            }else {
+                paused = false;
             }
-            console.log(blockArray);
         }
     });
     initDiploid();
