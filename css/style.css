@@ -48,7 +48,8 @@ svg {
 .block {
   background: #ee6e4d;
   position: absolute;
-  top: 350px; }
+  top: 350px;
+  border: 1px solid; }
 
 path {
   position: absolute;

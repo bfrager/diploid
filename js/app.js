@@ -19,7 +19,8 @@ $(function(){
 
     var grid = 75;
     var blockCount = 0;
-    var blockSpeed = .3;
+    //var blockSpeed = .3;
+    var blockSpeed = 2;
 
     var Player = function(selectorID,ghostID,lKeyCode,rKeyCode,uKeyCode,dKeyCode) {
         var p = this;
@@ -38,7 +39,7 @@ $(function(){
         p.moveDown = false;
 
         //create ghost divs for each player to 'move ahead' and see if moves are 'valid'
-        diploid.prepend('<div id="' + ghostID + '" class="ghost"></div>');
+        diploid.append('<div id="' + ghostID + '" class="ghost"></div>');
         p.g = $('#' + ghostID);
 
         $(p.g).css({'left': $(p.sel).position().left, 'top': $(p.sel).position().top});
@@ -89,11 +90,14 @@ $(function(){
         b.w = Math.round(Math.random() * grid) + grid;
         b.h = Math.round(Math.random() * grid) + grid;
 
+        b.alive = true;
+
         $(diploid).prepend('<div id="' + selectorID + '" class="block"></div>');
         $(b.sel).css({'left': (Math.random() * $(diploid).width())});
         $(b.sel).css('width', b.w);
         $(b.sel).css('height', b.h);
-        $(b.sel).css('top', ((Math.random() * $(diploid).height()) + $(diploid).height()));
+        $(b.sel).css('top', ($(diploid).height() + (Math.random() * 300)));
+        //$(b.sel).css('top', 300);
 
         //each block object has it's own intersect detection
         b.checkCorners = function(x,y) {
@@ -107,10 +111,15 @@ $(function(){
             b.BRY = $(b.sel).position().top + $(b.sel).height();
 
             b.checkIntersection();
-            if(!($(b.sel).position().top <= ($(b.sel).height() * -1))) {
-                moveBlockUp(b);
-            } else {
 
+            //if(!($(b.sel).position().top <= ($(b.sel).height() * -1))) {
+            if(b.alive == true) {
+                if(!($(b.sel).position().top <= 0)) {
+                    moveBlockUp(b);
+                    //console.log(b);
+            } else {
+                    b.regen();
+                }
             }
 
         };
@@ -129,19 +138,29 @@ $(function(){
                 console.log('WE HAVE INTERSECTION!!!');
             }
         };
+
         blockArray.push(b);
+        b.tick = setInterval(b.moveBlock,10);
+        b.regen = function() {
+            console.log(blockArray);
+            blockArray.pop();
+            clearInterval(b.tick);
+            b.alive = false;
+            delete this;
+            newBlock();
+            $(b.sel).remove();
+        };
     };
 
     function newBlock() {
         blockCount += 1;
+        //console.log('Block Count: ' + blockCount);
         var blockID = 'block' + blockCount;
         var block = new Block(blockID);
     }
 
     function generateBlocks(num) {
         for(i = 1; i <= num; i += 1) {
-            /*var blockID = 'block' + i;
-            var block = new Block(blockID);*/
             newBlock();
         }
     }
@@ -150,11 +169,9 @@ $(function(){
         $(who.sel).css('top', '-=' + blockSpeed);
     }
 
+    generateBlocks(2);
 
-    generateBlocks(20);
-    //var block1 = new Block('newBlock');
     console.log('Number of blocks: ' + blockArray.length);
-
     console.log(blockArray);
 
     //create startGame for setInterval() in initDeploid()
@@ -214,15 +231,14 @@ $(function(){
 
     function tick() {
 
-        for(i = 0; i < blockArray.length; i += 1) {
-            blockArray[i].moveBlock();
+        for(var i = 0; i < blockArray.length; i += 1) {
             for(var p = 0; p < playerArray.length; p += 1) {
                 if(checkCollision($(playerArray[p].sel),$(blockArray[i].sel))) {
                     console.log($(p1) + ' collided with a block!');
                 }
             }
         }
-        for(i = 0; i < playerArray.length; i += 1) {
+        for(var i = 0; i < playerArray.length; i += 1) {
             playerArray[i].move();
         }
         alignLine();
@@ -241,6 +257,10 @@ $(function(){
             event.preventDefault();
             clearInterval(startGame);
             console.log('Game Stopped!');
+
+            for(var i = 0; i < blockArray.length; i += 1) {
+                clearInterval(blockArray[i].tick);
+            }
         }
     });
     initDiploid();
