@@ -1,6 +1,8 @@
 $(function(){
-    var body = $('body');
-    var diploid = $('#diploid');
+    var $body = $('body');
+    var $diploid = $('#diploid');
+    var $time = $('#time');
+
 
     var paused = false;
 
@@ -24,6 +26,14 @@ $(function(){
     var blockCount = 0;
     var blockSpeed = 1;
 
+    var start;
+    var elapsedTime = 0;
+    var timer;
+
+    //for timer
+    /*var m = 0;
+    var s = 0;*/
+
     var Player = function(selectorID,ghostID,lKeyCode,rKeyCode,uKeyCode,dKeyCode) {
         var p = this;
         p.sel = '#' + selectorID;
@@ -41,20 +51,20 @@ $(function(){
         p.moveDown = false;
 
         //create ghost divs for each player to 'move ahead' and see if moves are 'valid'
-        diploid.append('<div id="' + ghostID + '" class="ghost"></div>');
+        $diploid.append('<div id="' + ghostID + '" class="ghost"></div>');
         p.g = $('#' + ghostID);
 
         $(p.g).css({'left': $(p.sel).position().left, 'top': $(p.sel).position().top});
 
         //player control key bindings
-        $(body).keydown(function(e) {
-            var p1k = e.keyCode;
+        $body.keydown(function(e) {
+            var p1k = e.which;
             if (p1k==lKeyCode) {p.moveLeft = true}
             if (p1k==rKeyCode) {p.moveRight = true}
             if (p1k==uKeyCode) {p.moveUp = true}
             if (p1k==dKeyCode) {p.moveDown = true}
         });
-        $(body).keyup(function(e) {
+        $body.keyup(function(e) {
             var p1k = e.keyCode;
             if (p1k==lKeyCode) {p.moveLeft = false}
             if (p1k==rKeyCode) {p.moveRight = false}
@@ -69,7 +79,7 @@ $(function(){
             if(p.moveUp) {$(p.g).css({'top': '-=' + speed}); pMoved = 1}
             if(p.moveDown) {$(p.g).css({'top': '+=' + speed}); pMoved = 1}
             if(pMoved) {
-                if(!checkOutOfBounds($(p.g), $(diploid))) {
+                if(!checkOutOfBounds($(p.g), $diploid)) {
                     $(p.sel).css({'top': $(p.g).position().top, 'left': $(p.g).position().left});
                 } else {
                     $(p.g).css({'top': $(p.sel).position().top, 'left': $(p.sel).position().left});
@@ -94,18 +104,16 @@ $(function(){
 
         b.alive = true;
 
-        $(diploid).prepend('<div id="' + selectorID + '" class="block"></div>');
-        $(b.sel).css({'left': (Math.random() * $(diploid).width())});
+        $diploid.prepend('<div id="' + selectorID + '" class="block"></div>');
+        $(b.sel).css({'left': (Math.random() * $diploid.width())});
         $(b.sel).css('width', b.w);
         $(b.sel).css('height', b.h);
-        $(b.sel).css('top', ($(diploid).height() + (Math.random() * $(diploid).height())));
+        $(b.sel).css('top', ($diploid.height() + (Math.random() * $diploid.height())));
 
         //each block object has it's own intersect detection
         b.checkCorners = function(x,y) {
             return (((lineY2 - lineY1) * x) + ((lineX1 - lineX2) * y)) + ((lineX2 * lineY1) - (lineX1 * lineY2));
         };
-
-
 
         b.checkIntersection = function() {
             b.cornerCheckTL = b.checkCorners(b.BLX,b.BRY);
@@ -119,6 +127,7 @@ $(function(){
                 return false;
             } else {
                 //do something when line gets interrupted
+                console.log('COLLISION DETECTED');
             }
         };
 
@@ -168,9 +177,9 @@ $(function(){
             blockArray.shift();
             clearInterval(b.tick);
             b.alive = false;
-            delete this;
             newBlock();
             $(b.sel).remove();
+            b = null;
         };
         blockArray.push(b);
     };
@@ -246,14 +255,24 @@ $(function(){
     function initDiploid() {
         alignLine();
         generateBlocks(blockAmount);
+
+        start = new Date();
+
+
+        timer = setInterval(function(){
+            var now = new Date();
+            elapsedTime = Math.floor((now - start)/1000);
+
+            $time.html(elapsedTime)},1000);
         startGame = setInterval(tick, 10);
     }
 
     //pause/unpause game with spacebar
-    $(body).keydown(function(s){
-        if(s.keyCode == 32){
+    $body.on('keypress', function(evt){
+        console.log(evt);
+        if(evt.which == 32){
             // without scrolling the page down
-            event.preventDefault();
+            evt.preventDefault();
             if(!paused) {
                 paused = true;
             }else {
