@@ -2,11 +2,11 @@ $(function(){
     var body = $('body');
     var diploid = $('#diploid');
 
-    var testBlock = $('#testBlock');
-    var blockBLX = null;
+    //var testBlock = $('#testBlock');
+    /*var blockBLX = null;
     var blockTLY = null;
     var blockTRX = null;
-    var blockBRY = null;
+    var blockBRY = null;*/
 
     //line
     var line = $('#line');
@@ -21,6 +21,8 @@ $(function(){
     var speed = 3;
 
     var playerArray = [];
+
+    var blockArray = [];
 
     var Player = function(selectorID,ghostID,lKeyCode,rKeyCode,uKeyCode,dKeyCode) {
         var player = this;
@@ -73,33 +75,63 @@ $(function(){
                     $(player.g).css({'top': $(player.sel).position().top, 'left': $(player.sel).position().left});
                 }
             }
-
-            if(checkCollision($(player.sel),$(testBlock))) {
-                console.log(selectorID + ' collided with a block!');
-            }
         };
 
         //add this player to the player array so that both players can be targeted together quickly
         playerArray.push(player);
     };
 
-    var p1 = new Player('p1',"ghost1",65,68,87,83);
+    var p1 = new Player('p1','ghost1',65,68,87,83);
     var p2 = new Player('p2','ghost2',37,39,38,40);
 
     //block object
-    function moveTestBlock() {
-        $(testBlock).css({'top': $(testBlock).position().top -.5});
-        blockBLX = $(testBlock).position().left;
-        blockTLY =  $(testBlock).position().top;
-        blockTRX = $(testBlock).position().left + $(testBlock).width();
-        blockBRY = $(testBlock).position().top + $(testBlock).height();
-        checkIntersection();
-    }
-
-    var Block = function(blockX,blockW,blockH) {
+    var Block = function(selectorID,blockX,blockW,blockH) {
         var block = this;
+        block.sel = '#' + selectorID;
 
+        $(diploid).prepend('<div id="' + selectorID + '" class="block"></div>');
+        $(block.sel).css({'left': blockX});
+        $(block.sel).css('width', blockW);
+        $(block.sel).css('height', blockH);
+
+
+        //block object has it's own intersect detection
+
+        block.checkCorners = function(x,y) {
+            return (((lineY2 - lineY1) * x) + ((lineX1 - lineX2) * y)) + ((lineX2 * lineY1) - (lineX1 * lineY2));
+        };
+
+        block.moveBlock = function() {
+            block.BLX = $(block.sel).position().left;
+            block.TLY =  $(block.sel).position().top;
+            block.TRX = $(block.sel).position().left + $(block.sel).width();
+            block.BRY = $(block.sel).position().top + $(block.sel).height();
+
+            block.checkIntersection();
+        };
+
+        block.checkIntersection = function() {
+            block.cornerCheckTL = block.checkCorners(block.BLX,block.BRY);
+            block.cornerCheckTR = block.checkCorners(block.TRX,block.BRY);
+            block.cornerCheckBL = block.checkCorners(block.BLX,block.TLY);
+            block.cornerCheckBR = block.checkCorners(block.TRX,block.TLY);
+
+            if((block.cornerCheckBL < 0 && block.cornerCheckBR < 0 && block.cornerCheckTL < 0 && block.cornerCheckTR < 0) || (block.cornerCheckBL > 0 && block.cornerCheckBR > 0 && block.cornerCheckTL > 0 && block.cornerCheckTR > 0)) {
+                return false;
+            } else if((lineX1 > block.TRX && lineX2 > block.TRX) || (lineX1 < block.BLX && lineX2 < block.BLX) || ((lineY1 > block.BRY && lineY2 > block.BRY)) || (lineY1 < block.TLY && lineY2 < block.TLY)) {
+                return false;
+            } else {
+                console.log('WE HAVE INTERSECTION!!!');
+            }
+        };
+        blockArray.push(block);
     };
+
+    var block1 = new Block('newBlock',40,200,75);
+    var block2 = new Block('newBlock2',600,100,250);
+    console.log('Number of blocks: ' + blockArray.length);
+
+    console.log(blockArray);
 
     //create startGame for setInterval() in initDeploid()
     var startGame = null;
@@ -156,30 +188,19 @@ $(function(){
         return ((right1 > left2 && (bottom1 > top2 && top1 < bottom2)) && (left1 < right2 && (top1 < bottom2 && bottom1 > top2)));
     }
 
-    function checkCorners(x,y) {
-        return (((lineY2 - lineY1) * x) + ((lineX1 - lineX2) * y)) + ((lineX2 * lineY1) - (lineX1 * lineY2));
-    }
-
-    function checkIntersection() {
-        var cornerCheckTL = checkCorners(blockBLX,blockBRY);
-        var cornerCheckTR = checkCorners(blockTRX,blockBRY);
-        var cornerCheckBL = checkCorners(blockBLX,blockTLY);
-        var cornerCheckBR = checkCorners(blockTRX,blockTLY);
-        if((cornerCheckBL < 0 && cornerCheckBR < 0 && cornerCheckTL < 0 && cornerCheckTR < 0) || (cornerCheckBL > 0 && cornerCheckBR > 0 && cornerCheckTL > 0 && cornerCheckTR > 0)) {
-            return false;
-        } else if((lineX1 > blockTRX && lineX2 > blockTRX) || (lineX1 < blockBLX && lineX2 < blockBLX) || ((lineY1 > blockBRY && lineY2 > blockBRY)) || (lineY1 < blockTLY && lineY2 < blockTLY)) {
-            return false;
-        } else {
-            console.log('WE HAVE INTERSECTION!!!');
-        }
-    }
-
     function tick() {
-        for(var i = 0; i < playerArray.length; i += 1) {
+        for(i = 0; i < playerArray.length; i += 1) {
             playerArray[i].move();
         }
+        for(i = 0; i < blockArray.length; i += 1) {
+            blockArray[i].moveBlock();
+            for(var p = 0; p < playerArray.length; p += 1) {
+                if(checkCollision($(playerArray[p].sel),$(blockArray[i].sel))) {
+                    console.log($(p1) + ' collided with a block!');
+                }
+            }
+        }
         alignLine();
-        moveTestBlock();
     }
 
     //initialize the game
