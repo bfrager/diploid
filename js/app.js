@@ -86,6 +86,21 @@ $(function(){
     var p1 = new Player('p1',"ghost1",65,68,87,83);
     var p2 = new Player('p2','ghost2',37,39,38,40);
 
+    //block object
+    function moveTestBlock() {
+        $(testBlock).css({'top': $(testBlock).position().top -.5});
+        blockBLX = $(testBlock).position().left;
+        blockTLY =  $(testBlock).position().top;
+        blockTRX = $(testBlock).position().left + $(testBlock).width();
+        blockBRY = $(testBlock).position().top + $(testBlock).height();
+        checkIntersection();
+    }
+
+    var Block = function(blockX,blockW,blockH) {
+        var block = this;
+
+    };
+
     //create startGame for setInterval() in initDeploid()
     var startGame = null;
 
@@ -157,15 +172,6 @@ $(function(){
         } else {
             console.log('WE HAVE INTERSECTION!!!');
         }
-    }
-
-    function moveTestBlock() {
-        $(testBlock).css({'top': $(testBlock).position().top -.5});
-        blockBLX = $(testBlock).position().left;
-        blockTLY =  $(testBlock).position().top;
-        blockTRX = $(testBlock).position().left + $(testBlock).width();
-        blockBRY = $(testBlock).position().top + $(testBlock).height();
-        checkIntersection();
     }
 
     function tick() {
