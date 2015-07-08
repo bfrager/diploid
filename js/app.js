@@ -12,9 +12,12 @@ $(function(){
     var lineP2 = [];
 
     //global speed
-    var speed = 3;
+    var speed = 2;
+
     var playerArray = [];
     var blockArray = [];
+
+    var grid = 75;
 
     var Player = function(selectorID,ghostID,lKeyCode,rKeyCode,uKeyCode,dKeyCode) {
         var player = this;
@@ -33,8 +36,8 @@ $(function(){
         player.moveDown = false;
 
         //create ghost divs for each player to 'move ahead' and see if moves are 'valid'
-        diploid.prepend('<div id="'+ghostID+'" class="ghost"></div>');
-        player.g = $('#'+ghostID);
+        diploid.prepend('<div id="' + ghostID + '" class="ghost"></div>');
+        player.g = $('#' + ghostID);
 
         $(player.g).css({'left': $(player.sel).position().left, 'top': $(player.sel).position().top});
 
@@ -77,15 +80,18 @@ $(function(){
     var p2 = new Player('p2','ghost2',37,39,38,40);
 
     //block object
-    var Block = function(selectorID,blockX,blockW,blockH) {
+    var Block = function(selectorID) {
         var block = this;
         block.sel = '#' + selectorID;
 
-        $(diploid).prepend('<div id="' + selectorID + '" class="block"></div>');
-        $(block.sel).css({'left': blockX});
-        $(block.sel).css('width', blockW);
-        $(block.sel).css('height', blockH);
+        block.w = Math.round(Math.random() * grid) + grid;
+        block.h = Math.round(Math.random() * grid) + grid;
 
+        $(diploid).prepend('<div id="' + selectorID + '" class="block"></div>');
+        $(block.sel).css({'left': (Math.random() * $(diploid).width())});
+        $(block.sel).css('width', block.w);
+        $(block.sel).css('height', block.h);
+        $(block.sel).css('top', ((Math.random() * $(diploid).height()) + $(diploid).height()));
 
         //each block object has it's own intersect detection
         block.checkCorners = function(x,y) {
@@ -99,6 +105,7 @@ $(function(){
             block.BRY = $(block.sel).position().top + $(block.sel).height();
 
             block.checkIntersection();
+            moveBlockUp(block);
         };
 
         block.checkIntersection = function() {
@@ -118,8 +125,20 @@ $(function(){
         blockArray.push(block);
     };
 
-    var block1 = new Block('newBlock',40,200,75);
-    var block2 = new Block('newBlock2',600,100,250);
+    function generateBlocks(num) {
+        for(i = 1; i <= num; i += 1) {
+            var blockID = 'block' + i;
+            var block = new Block(blockID);
+        }
+    }
+
+    function moveBlockUp(who) {
+        $(who.sel).css('top', '-=.3');
+    }
+
+
+generateBlocks(10);
+    //var block1 = new Block('newBlock');
     console.log('Number of blocks: ' + blockArray.length);
 
     console.log(blockArray);
@@ -180,9 +199,7 @@ $(function(){
     }
 
     function tick() {
-        for(i = 0; i < playerArray.length; i += 1) {
-            playerArray[i].move();
-        }
+
         for(i = 0; i < blockArray.length; i += 1) {
             blockArray[i].moveBlock();
             for(var p = 0; p < playerArray.length; p += 1) {
@@ -190,6 +207,9 @@ $(function(){
                     console.log($(p1) + ' collided with a block!');
                 }
             }
+        }
+        for(i = 0; i < playerArray.length; i += 1) {
+            playerArray[i].move();
         }
         alignLine();
     }

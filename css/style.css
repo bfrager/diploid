@@ -7,7 +7,9 @@ body {
   height: 400px;
   background: #999;
   margin: 0 auto;
-  position: relative; }
+  position: relative;
+  margin-top: 200px;
+  overflow: hidden; }
 
 .orb, .ghost {
   position: absolute;
@@ -22,8 +24,8 @@ body {
 
 #p2 {
   background: #2a668a;
-  left: 300px;
-  top: 100px; }
+  left: 0;
+  top: 0; }
 
 .ghost {
   visibility: hidden; }
@@ -35,6 +37,14 @@ svg {
 #line {
   stroke: #ff2500;
   stroke-width: 2; }
+
+#testBlock {
+  background: #ee6e4d;
+  position: absolute;
+  left: 250px;
+  top: 350px;
+  width: 100px;
+  height: 100px; }
 
 .block {
   background: #ee6e4d;
