@@ -2,12 +2,6 @@ $(function(){
     var body = $('body');
     var diploid = $('#diploid');
 
-    //var testBlock = $('#testBlock');
-    /*var blockBLX = null;
-    var blockTLY = null;
-    var blockTRX = null;
-    var blockBRY = null;*/
-
     //line
     var line = $('#line');
     var lineX1 = null;
@@ -19,9 +13,7 @@ $(function(){
 
     //global speed
     var speed = 3;
-
     var playerArray = [];
-
     var blockArray = [];
 
     var Player = function(selectorID,ghostID,lKeyCode,rKeyCode,uKeyCode,dKeyCode) {
@@ -95,8 +87,7 @@ $(function(){
         $(block.sel).css('height', blockH);
 
 
-        //block object has it's own intersect detection
-
+        //each block object has it's own intersect detection
         block.checkCorners = function(x,y) {
             return (((lineY2 - lineY1) * x) + ((lineX1 - lineX2) * y)) + ((lineX2 * lineY1) - (lineX1 * lineY2));
         };
