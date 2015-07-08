@@ -60,6 +60,25 @@ $(function(){
             if (p1k==dKeyCode) {player.moveDown = false}
         });
 
+        player.move = function() {
+            var pMoved = 0;
+            if(player.moveLeft) {$(player.g).css({'left': '-=' + speed}); pMoved = 1}
+            if(player.moveRight) {$(player.g).css({'left': '+=' + speed}); pMoved = 1}
+            if(player.moveUp) {$(player.g).css({'top': '-=' + speed}); pMoved = 1}
+            if(player.moveDown) {$(player.g).css({'top': '+=' + speed}); pMoved = 1}
+            if(pMoved) {
+                if(!checkOutOfBounds($(player.g), $(diploid))) {
+                    $(player.sel).css({'top': $(player.g).position().top, 'left': $(player.g).position().left});
+                } else {
+                    $(player.g).css({'top': $(player.sel).position().top, 'left': $(player.sel).position().left});
+                }
+            }
+
+            if(checkCollision($(player.sel),$(testBlock))) {
+                console.log(selectorID + ' collided with a block!');
+            }
+        };
+
         //add this player to the player array so that both players can be targeted together quickly
         playerArray.push(player);
     };
@@ -111,17 +130,14 @@ $(function(){
     function checkCollision(obj1,obj2) {
         var pos1 = obj1.position();
         var pos2 = obj2.position();
-
         var left1 = pos1.left;
         var right1 = left1 + obj1.width();
         var top1 = pos1.top;
         var bottom1 = top1 + obj1.height();
-
         var left2 = pos2.left;
         var right2 = left2 + obj2.width();
         var top2 = pos2.top;
         var bottom2 = top2 + obj2.height();
-
         return ((right1 > left2 && (bottom1 > top2 && top1 < bottom2)) && (left1 < right2 && (top1 < bottom2 && bottom1 > top2)));
     }
 
@@ -135,10 +151,8 @@ $(function(){
         var cornerCheckBL = checkCorners(blockBLX,blockTLY);
         var cornerCheckBR = checkCorners(blockTRX,blockTLY);
         if((cornerCheckBL < 0 && cornerCheckBR < 0 && cornerCheckTL < 0 && cornerCheckTR < 0) || (cornerCheckBL > 0 && cornerCheckBR > 0 && cornerCheckTL > 0 && cornerCheckTR > 0)) {
-            console.log('no intersection :(');
             return false;
         } else if((lineX1 > blockTRX && lineX2 > blockTRX) || (lineX1 < blockBLX && lineX2 < blockBLX) || ((lineY1 > blockBRY && lineY2 > blockBRY)) || (lineY1 < blockTLY && lineY2 < blockTLY)) {
-            console.log('no intersection :(');
             return false;
         } else {
             console.log('WE HAVE INTERSECTION!!!');
@@ -151,34 +165,12 @@ $(function(){
         blockTLY =  $(testBlock).position().top;
         blockTRX = $(testBlock).position().left + $(testBlock).width();
         blockBRY = $(testBlock).position().top + $(testBlock).height();
-
         checkIntersection();
     }
 
-    function movePlayer(player) {
-        var pMoved = 0;
-        if(player.moveLeft) {$(player.g).css({'left': '-=' + speed}); pMoved = 1}
-        if(player.moveRight) {$(player.g).css({'left': '+=' + speed}); pMoved = 1}
-        if(player.moveUp) {$(player.g).css({'top': '-=' + speed}); pMoved = 1}
-        if(player.moveDown) {$(player.g).css({'top': '+=' + speed}); pMoved = 1}
-        if(pMoved) {
-            if(!checkOutOfBounds($(player.g), $(diploid))) {
-                $(player.sel).css({'top': $(player.g).position().top, 'left': $(player.g).position().left});
-            } else {
-                $(player.g).css({'top': $(player.sel).position().top, 'left': $(player.sel).position().left});
-            }
-        }
-    }
-
     function tick() {
-        movePlayer(p1);
-        movePlayer(p2);
-
-        if(checkCollision($(p1.sel),$(testBlock))) {
-            console.log('Player 1 collided with a block!');
-        }
-        if(checkCollision($(p2.sel),$(testBlock))) {
-            console.log('Player 2 Collided with a block!');
+        for(var i = 0; i < playerArray.length; i += 1) {
+            playerArray[i].move();
         }
         alignLine();
         moveTestBlock();
