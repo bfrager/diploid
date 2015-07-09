@@ -188,20 +188,27 @@ $(function() {
                         //console.log(playerArray[p].name);
                     }
                 }
-
-                if (b.alive == true) {
-                    /*if(!($(b.sel).position().top <= ($(b.sel).height() * -1))) {
-                     moveBlockUp(b);
-                     console.log(b);
-                     } else {
-                     b.regen();
-                     }*/
-
-
-                }
             }
         };
         //gets fired ONCE because jQuery animate has its own setInterval steps
+        function moveBlockUp(who) {
+            var randomStartTime = Math.floor(Math.random() * $diploid.height()) * grid/4;
+            $(who.sel).delay(randomStartTime).animate(
+                {
+                    'top': ($(who.sel).height() * -1)
+                },
+                {
+                    step: function(){
+                        //console.log('STEP!');
+                    },
+                    duration: 5000,
+                    easing: 'linear',
+                    complete: function(){
+                        b.regen();
+                    }
+                }
+            )}
+
         moveBlockUp(b);
 
         b.tick = setInterval(b.moveBlock, 10);
@@ -230,20 +237,7 @@ $(function() {
         }
     }
 
-    function moveBlockUp(who) {
-        //$(who.sel).css('top', '-=' + blockSpeed);
 
-        /*******/
-
-        var whereTo = $(who.sel).position().top - $diploid.height();
-
-        $(who.sel).animate({
-            'top': ($(who.sel).height() * -1)
-        },5000,'linear',function(){
-
-        }).delay(Math.floor(Math.random() * (grid * $diploid.height())));
-        console.log();
-    }
 
     //create startGame for setInterval() in initDeploid()
     var startGame = null;
@@ -313,9 +307,8 @@ $(function() {
 
     //pause/unpause game with spacebar
     $body.on('keypress', function(evt){
-        console.log(evt);
+        //console.log(evt);
         if(evt.which == 32){
-            // without scrolling the page down
             evt.preventDefault();
             if(!paused) {
                 paused = true;
