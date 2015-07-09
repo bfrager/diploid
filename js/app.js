@@ -3,6 +3,8 @@ $(function() {
     var $diploid = $('#diploid');
     var $time = $('#time');
 
+    var p1;
+    var p2;
 
     var paused = false;
 
@@ -21,7 +23,7 @@ $(function() {
     var blockArray = [];
 
     var grid = 75;
-    var blockAmount = 50;
+    var blockAmount = 3;
     var blockCount = 0;
     var blockDuration = 4000;
 
@@ -125,9 +127,6 @@ $(function() {
         //add this player to the player array so that both players can be targeted together quickly
         playerArray.push(p);
     };
-
-    var p1 = new Player('p1', 'ghost1', 65, 68, 87, 83);
-    var p2 = new Player('p2', 'ghost2', 37, 39, 38, 40);
 
     //block object
     var Block = function (selectorID) {
@@ -291,37 +290,50 @@ $(function() {
         }
     }
 
+    //clear all blocks
+    function clearBlocks() {
+        $('.block').stop(true,true).remove();
+        for(var i = 0; i < blockArray.length; i += 1) {
+            blockArray[i] = null;
+        }
+        blockArray = [];
+    }
+
     //initialize the game
     function initDiploid() {
+
+        if(startGame) {
+            clearInterval(startGame);
+        }
+
+        p1 = new Player('p1', 'ghost1', 65, 68, 87, 83);
+        p2 = new Player('p2', 'ghost2', 37, 39, 38, 40);
         alignLine();
+
+        clearBlocks();
+
         generateBlocks(blockAmount);
 
         start = new Date();
 
-
         timer = setInterval(function(){
             var now = new Date();
             elapsedTime = Math.floor((now - start)/1000);
-
             $time.html(elapsedTime)},1000);
         startGame = setInterval(tick, 10);
     }
 
-    //pause/unpause game with spacebar
+    //restart game with spacebar
     $body.on('keypress', function(evt){
         if(evt.which == 32){
-            console.log('Should pause now!');
+            console.log('Should restart now!');
             evt.preventDefault();
-            if(!paused) {
-                console.log(blockArray);
-                $.each(blockArray,function(i){
-                    $(blockArray[i].sel).stop(true,false);
-                });
-                paused = true;
-            }else {
-                paused = false;
-            }
+            $body.unbind('keydown');
+            $body.unbind('keyup');
+            initDiploid();
+            console.log(blockArray);
         }
     });
     initDiploid();
+
 });
