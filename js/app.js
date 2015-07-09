@@ -1,4 +1,4 @@
-$(function(){
+$(function() {
     var $body = $('body');
     var $diploid = $('#diploid');
     var $time = $('#time');
@@ -32,14 +32,14 @@ $(function(){
 
     //for timer
     /*var m = 0;
-    var s = 0;*/
+     var s = 0;*/
 
-    var Player = function(selectorID,ghostID,lKeyCode,rKeyCode,uKeyCode,dKeyCode) {
+    var Player = function (selectorID, ghostID, lKeyCode, rKeyCode, uKeyCode, dKeyCode) {
         var p = this;
         p.sel = '#' + selectorID;
         p.name = 'Player ' + selectorID;
 
-        p.getCenter = function() {
+        p.getCenter = function () {
             p.centerX = (parseInt($(p.sel).css("left")) + (parseInt($(p.sel).width()) / 2 ));
             p.centerY = (parseInt($(p.sel).css("top")) + (parseInt($(p.sel).height()) / 2 ));
         };
@@ -57,29 +57,57 @@ $(function(){
         $(p.g).css({'left': $(p.sel).position().left, 'top': $(p.sel).position().top});
 
         //player control key bindings
-        $body.keydown(function(e) {
+        $body.keydown(function (e) {
             var p1k = e.which;
-            if (p1k==lKeyCode) {p.moveLeft = true}
-            if (p1k==rKeyCode) {p.moveRight = true}
-            if (p1k==uKeyCode) {p.moveUp = true}
-            if (p1k==dKeyCode) {p.moveDown = true}
+            if (p1k == lKeyCode) {
+                p.moveLeft = true
+            }
+            if (p1k == rKeyCode) {
+                p.moveRight = true
+            }
+            if (p1k == uKeyCode) {
+                p.moveUp = true
+            }
+            if (p1k == dKeyCode) {
+                p.moveDown = true
+            }
         });
-        $body.keyup(function(e) {
+        $body.keyup(function (e) {
             var p1k = e.keyCode;
-            if (p1k==lKeyCode) {p.moveLeft = false}
-            if (p1k==rKeyCode) {p.moveRight = false}
-            if (p1k==uKeyCode) {p.moveUp = false}
-            if (p1k==dKeyCode) {p.moveDown = false}
+            if (p1k == lKeyCode) {
+                p.moveLeft = false
+            }
+            if (p1k == rKeyCode) {
+                p.moveRight = false
+            }
+            if (p1k == uKeyCode) {
+                p.moveUp = false
+            }
+            if (p1k == dKeyCode) {
+                p.moveDown = false
+            }
         });
 
-        p.move = function() {
+        p.move = function () {
             var pMoved = 0;
-            if(p.moveLeft) {$(p.g).css({'left': '-=' + speed}); pMoved = 1}
-            if(p.moveRight) {$(p.g).css({'left': '+=' + speed}); pMoved = 1}
-            if(p.moveUp) {$(p.g).css({'top': '-=' + speed}); pMoved = 1}
-            if(p.moveDown) {$(p.g).css({'top': '+=' + speed}); pMoved = 1}
-            if(pMoved) {
-                if(!checkOutOfBounds($(p.g), $diploid)) {
+            if (p.moveLeft) {
+                $(p.g).css({'left': '-=' + speed});
+                pMoved = 1
+            }
+            if (p.moveRight) {
+                $(p.g).css({'left': '+=' + speed});
+                pMoved = 1
+            }
+            if (p.moveUp) {
+                $(p.g).css({'top': '-=' + speed});
+                pMoved = 1
+            }
+            if (p.moveDown) {
+                $(p.g).css({'top': '+=' + speed});
+                pMoved = 1
+            }
+            if (pMoved) {
+                if (!checkOutOfBounds($(p.g), $diploid)) {
                     $(p.sel).css({'top': $(p.g).position().top, 'left': $(p.g).position().left});
                 } else {
                     $(p.g).css({'top': $(p.sel).position().top, 'left': $(p.sel).position().left});
@@ -91,11 +119,11 @@ $(function(){
         playerArray.push(p);
     };
 
-    var p1 = new Player('p1','ghost1',65,68,87,83);
-    var p2 = new Player('p2','ghost2',37,39,38,40);
+    var p1 = new Player('p1', 'ghost1', 65, 68, 87, 83);
+    var p2 = new Player('p2', 'ghost2', 37, 39, 38, 40);
 
     //block object
-    var Block = function(selectorID) {
+    var Block = function (selectorID) {
         var b = this;
         b.sel = '#' + selectorID;
 
@@ -108,22 +136,23 @@ $(function(){
         $(b.sel).css({'left': (Math.random() * $diploid.width())});
         $(b.sel).css('width', b.w);
         $(b.sel).css('height', b.h);
-        $(b.sel).css('top', ($diploid.height() + (Math.random() * $diploid.height())));
+        //$(b.sel).css('top', ($diploid.height() + (Math.random() * $diploid.height())));
+        $(b.sel).css('top', ($diploid.height()));
 
         //each block object has it's own intersect detection
-        b.checkCorners = function(x,y) {
+        b.checkCorners = function (x, y) {
             return (((lineY2 - lineY1) * x) + ((lineX1 - lineX2) * y)) + ((lineX2 * lineY1) - (lineX1 * lineY2));
         };
 
-        b.checkIntersection = function() {
-            b.cornerCheckTL = b.checkCorners(b.BLX,b.BRY);
-            b.cornerCheckTR = b.checkCorners(b.TRX,b.BRY);
-            b.cornerCheckBL = b.checkCorners(b.BLX,b.TLY);
-            b.cornerCheckBR = b.checkCorners(b.TRX,b.TLY);
+        b.checkIntersection = function () {
+            b.cornerCheckTL = b.checkCorners(b.BLX, b.BRY);
+            b.cornerCheckTR = b.checkCorners(b.TRX, b.BRY);
+            b.cornerCheckBL = b.checkCorners(b.BLX, b.TLY);
+            b.cornerCheckBR = b.checkCorners(b.TRX, b.TLY);
 
-            if((b.cornerCheckBL < 0 && b.cornerCheckBR < 0 && b.cornerCheckTL < 0 && b.cornerCheckTR < 0) || (b.cornerCheckBL > 0 && b.cornerCheckBR > 0 && b.cornerCheckTL > 0 && b.cornerCheckTR > 0)) {
+            if ((b.cornerCheckBL < 0 && b.cornerCheckBR < 0 && b.cornerCheckTL < 0 && b.cornerCheckTR < 0) || (b.cornerCheckBL > 0 && b.cornerCheckBR > 0 && b.cornerCheckTL > 0 && b.cornerCheckTR > 0)) {
                 return false;
-            } else if((lineX1 > b.TRX && lineX2 > b.TRX) || (lineX1 < b.BLX && lineX2 < b.BLX) || ((lineY1 > b.BRY && lineY2 > b.BRY)) || (lineY1 < b.TLY && lineY2 < b.TLY)) {
+            } else if ((lineX1 > b.TRX && lineX2 > b.TRX) || (lineX1 < b.BLX && lineX2 < b.BLX) || ((lineY1 > b.BRY && lineY2 > b.BRY)) || (lineY1 < b.TLY && lineY2 < b.TLY)) {
                 return false;
             } else {
                 //do something when line gets interrupted
@@ -131,7 +160,7 @@ $(function(){
             }
         };
 
-        b.checkCollision = function(obj1,obj2) {
+        b.checkCollision = function (obj1, obj2) {
             var pos1 = obj1.position();
             var pos2 = obj2.position();
             var left1 = pos1.left;
@@ -145,34 +174,38 @@ $(function(){
             return ((right1 > left2 && (bottom1 > top2 && top1 < bottom2)) && (left1 < right2 && (top1 < bottom2 && bottom1 > top2)));
         };
 
-        b.moveBlock = function() {
-            if(!paused) {
+        b.moveBlock = function () {
+            if (!paused) {
                 b.BLX = $(b.sel).position().left;
-                b.TLY =  $(b.sel).position().top;
+                b.TLY = $(b.sel).position().top;
                 b.TRX = $(b.sel).position().left + $(b.sel).width();
                 b.BRY = $(b.sel).position().top + $(b.sel).height();
 
                 b.checkIntersection();
 
-                for(var p = 0; p < playerArray.length; p += 1){
-                    if(b.checkCollision($(playerArray[p].sel), $(b.sel))) {
+                for (var p = 0; p < playerArray.length; p += 1) {
+                    if (b.checkCollision($(playerArray[p].sel), $(b.sel))) {
                         //console.log(playerArray[p].name);
                     }
                 }
 
-                if(b.alive == true) {
-                    if(!($(b.sel).position().top <= ($(b.sel).height() * -1))) {
-                        moveBlockUp(b);
-                        //console.log(b);
-                    } else {
-                        b.regen();
-                    }
+                if (b.alive == true) {
+                    /*if(!($(b.sel).position().top <= ($(b.sel).height() * -1))) {
+                     moveBlockUp(b);
+                     console.log(b);
+                     } else {
+                     b.regen();
+                     }*/
+
+
                 }
             }
         };
+        //gets fired ONCE because jQuery animate has its own setInterval steps
+        moveBlockUp(b);
 
-        b.tick = setInterval(b.moveBlock,10);
-        b.regen = function() {
+        b.tick = setInterval(b.moveBlock, 10);
+        b.regen = function () {
             //console.log(blockArray);
             blockArray.shift();
             clearInterval(b.tick);
@@ -192,13 +225,24 @@ $(function(){
     }
 
     function generateBlocks(num) {
-        for(var i = 1; i <= num; i += 1) {
+        for (var i = 1; i <= num; i += 1) {
             newBlock();
         }
     }
 
     function moveBlockUp(who) {
-        $(who.sel).css('top', '-=' + blockSpeed);
+        //$(who.sel).css('top', '-=' + blockSpeed);
+
+        /*******/
+
+        var whereTo = $(who.sel).position().top - $diploid.height();
+
+        $(who.sel).animate({
+            'top': ($(who.sel).height() * -1)
+        },5000,'linear',function(){
+
+        }).delay(Math.floor(Math.random() * (grid * $diploid.height())));
+        console.log();
     }
 
     //create startGame for setInterval() in initDeploid()
