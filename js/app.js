@@ -16,15 +16,14 @@ $(function() {
     var lineP2 = [];
 
     //global speed
-    var speed = 2;
-
+    var speed = 3;
     var playerArray = [];
     var blockArray = [];
 
     var grid = 75;
-    var blockAmount = 15;
+    var blockAmount = 50;
     var blockCount = 0;
-    var blockDuration = 7000;
+    var blockDuration = 4000;
 
     var start;
     var elapsedTime = 0;
@@ -137,14 +136,14 @@ $(function() {
 
         b.w = Math.round(Math.random() * grid) + grid;
         b.h = Math.round(Math.random() * grid) + grid;
+        b.l = Math.round(Math.random() * $diploid.width());
 
         b.alive = true;
 
         $diploid.prepend('<div id="' + selectorID + '" class="block"></div>');
-        $(b.sel).css({'left': (Math.random() * $diploid.width())});
+        $(b.sel).css({'left': b.l});
         $(b.sel).css('width', b.w);
         $(b.sel).css('height', b.h);
-        //$(b.sel).css('top', ($diploid.height() + (Math.random() * $diploid.height())));
         $(b.sel).css('top', ($diploid.height()));
 
         //each block object has it's own intersect detection
