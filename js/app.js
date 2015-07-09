@@ -10,7 +10,7 @@ $(function() {
     var gameStarted = false;
 
     //line
-    var line = $('#line');
+    var $line = $('#line');
     var lineX1 = null;
     var lineY1 = null;
     var lineX2 = null;
@@ -40,13 +40,17 @@ $(function() {
 
     //PLAYER OBJECT
     var Player = function (selectorID, ghostID, lKeyCode, rKeyCode, uKeyCode, dKeyCode) {
+        $diploid.append('<div class="orb" id="' + selectorID + '"></div>');
+
         var p = this;
-        p.sel = '#' + selectorID;
+        p.ID = '#' + selectorID;
         p.name = 'Player ' + selectorID;
 
+        var $psel = $(p.ID);
+
         p.getCenter = function () {
-            p.centerX = (parseInt($(p.sel).css("left")) + (parseInt($(p.sel).width()) / 2 ));
-            p.centerY = (parseInt($(p.sel).css("top")) + (parseInt($(p.sel).height()) / 2 ));
+            p.centerX = (parseInt($psel.css("left")) + (parseInt($psel.width()) / 2 ));
+            p.centerY = (parseInt($psel.css("top")) + (parseInt($psel.height()) / 2 ));
         };
 
         //is player currently trying to move?
@@ -55,13 +59,12 @@ $(function() {
         p.moveUp = false;
         p.moveDown = false;
 
-        $diploid.append('<div class="orb" id="' + selectorID + '"></div>');
-
         //create ghost divs for each player to 'move ahead' and see if moves are 'valid'
         $diploid.append('<div id="' + ghostID + '" class="ghost"></div>');
         p.g = '#' + ghostID;
+        var $pg = $(p.g);
 
-        $(p.g).css({'left': $(p.sel).position().left, 'top': $(p.sel).position().top});
+        $pg.css({'left': $psel.position().left, 'top': $psel.position().top});
 
         //player control key bindings
 
@@ -111,32 +114,32 @@ $(function() {
         p.move = function () {
             var pMoved = 0;
             if (p.moveLeft) {
-                $(p.g).css({'left': '-=' + speed});
+                $pg.css({'left': '-=' + speed});
                 pMoved = 1
             }
             if (p.moveRight) {
-                $(p.g).css({'left': '+=' + speed});
+                $pg.css({'left': '+=' + speed});
                 pMoved = 1
             }
             if (p.moveUp) {
-                $(p.g).css({'top': '-=' + speed});
+                $pg.css({'top': '-=' + speed});
                 pMoved = 1
             }
             if (p.moveDown) {
-                $(p.g).css({'top': '+=' + speed});
+                $pg.css({'top': '+=' + speed});
                 pMoved = 1
             }
             if (pMoved) {
-                if (!checkOutOfBounds($(p.g), $diploid)) {
-                    $(p.sel).css({'top': $(p.g).position().top, 'left': $(p.g).position().left});
+                if (!checkOutOfBounds($pg, $diploid)) {
+                    $psel.css({'top': $pg.position().top, 'left': $pg.position().left});
                 } else {
-                    $(p.g).css({'top': $(p.sel).position().top, 'left': $(p.sel).position().left});
+                    $pg.css({'top': $psel.position().top, 'left': $psel.position().left});
                 }
             }
         };
 
         //add associated HTML selectors to this player's personal array
-        p.html = [p.sel, p.g];
+        p.html = [p.ID, p.g];
 
         //add this player to the player array so that both players can be targeted together quickly
         playerArray.push(p);
@@ -145,7 +148,11 @@ $(function() {
     //BLOCK OBJECT
     var Block = function (selectorID) {
         var b = this;
-        b.sel = '#' + selectorID;
+
+        $diploid.prepend('<div id="' + selectorID + '" class="block"></div>');
+
+        b.ID = '#' + selectorID;
+        var $bsel = $(b.ID);
 
         b.w = Math.round(Math.random() * grid) + grid;
         b.h = Math.round(Math.random() * grid) + grid;
@@ -153,11 +160,11 @@ $(function() {
 
         b.alive = true;
 
-        $diploid.prepend('<div id="' + selectorID + '" class="block"></div>');
-        $(b.sel).css({'left': b.l});
-        $(b.sel).css('width', b.w);
-        $(b.sel).css('height', b.h);
-        $(b.sel).css('top', ($diploid.height()));
+
+        $bsel.css({'left': b.l});
+        $bsel.css('width', b.w);
+        $bsel.css('height', b.h);
+        $bsel.css('top', ($diploid.height()));
 
         //each block object has it's own intersect detection
         b.checkCorners = function (x, y) {return (((lineY2 - lineY1) * x) + ((lineX1 - lineX2) * y)) + ((lineX2 * lineY1) - (lineX1 * lineY2));};
@@ -194,13 +201,13 @@ $(function() {
 
         b.checkHits = function () {
             if (!paused) {
-                b.BLX = $(b.sel).position().left;
-                b.TLY = $(b.sel).position().top;
-                b.TRX = $(b.sel).position().left + $(b.sel).width();
-                b.BRY = $(b.sel).position().top + $(b.sel).height();
+                b.BLX = $bsel.position().left;
+                b.TLY = $bsel.position().top;
+                b.TRX = $bsel.position().left + $bsel.width();
+                b.BRY = $bsel.position().top + $bsel.height();
 
                 for (var p = 0; p < playerArray.length; p += 1) {
-                    if (b.checkCollision($(playerArray[p].sel), $(b.sel))) {
+                    if (b.checkCollision($(playerArray[p].ID), $bsel)) {
                         //console.log('COLLISION DETECTED');
                         initDiploid();
                         break;
@@ -210,10 +217,10 @@ $(function() {
             }
         };
         //gets fired ONCE because jQuery animate has its own setInterval steps
-        function moveBlockUp(who) {
+        function moveBlockUp() {
             var randomStartTime = Math.floor(Math.random() * $diploid.height()) * grid/4;
-            $(who.sel).delay(randomStartTime).animate(
-                {'top': ($(who.sel).height() * -1)},
+            $bsel.delay(randomStartTime).animate(
+                {'top': ($bsel.height() * -1)},
                 {
                     step: function(){
                         b.checkHits();
@@ -229,7 +236,7 @@ $(function() {
         b.regen = function () {
             blockArray.shift();
             b.alive = false;
-            $(b.sel).remove();
+            $bsel.remove();
             b = null;
             newBlock();
         };
@@ -259,7 +266,7 @@ $(function() {
         p2.getCenter();
 
         //set line segment coordinates based on updated player center points
-        $(line).attr({
+        $line.attr({
             'x1': p1.centerX,
             'y1': p1.centerY,
             'x2': p2.centerX,
@@ -267,10 +274,10 @@ $(function() {
         });
 
         //set variables for updated line x/y attributes
-        lineX1 = $(line).attr('x1');
-        lineY1 = $(line).attr('y1');
-        lineX2 = $(line).attr('x2');
-        lineY2 = $(line).attr('y2');
+        lineX1 = $line.attr('x1');
+        lineY1 = $line.attr('y1');
+        lineX2 = $line.attr('x2');
+        lineY2 = $line.attr('y2');
 
         // X/Y array for each line point
         lineP1 = [lineX1,lineY1];
