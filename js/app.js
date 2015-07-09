@@ -182,7 +182,7 @@ $(function() {
             } else if ((lineX1 > b.TRX && lineX2 > b.TRX) || (lineX1 < b.BLX && lineX2 < b.BLX) || ((lineY1 > b.BRY && lineY2 > b.BRY)) || (lineY1 < b.TLY && lineY2 < b.TLY)) {
                 return false;
             } else {
-                console.log('LINE IS CURRENTLY INTERSECTING');
+                console.log('The Line Broke! You lose!');
                 initDiploid();
             }
         };
@@ -210,7 +210,7 @@ $(function() {
 
                 for (var p = 0; p < playerArray.length; p += 1) {
                     if (b.checkCollision($(playerArray[p].ID), $bsel)) {
-                        //console.log('COLLISION DETECTED');
+                        console.log('Collision! You lose!');
                         initDiploid();
                         break;
                     }
