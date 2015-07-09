@@ -187,7 +187,7 @@ $(function() {
             }
         };
 
-        b.checkCollision = function (obj1, obj2) {
+        /*b.checkCollision = function (obj1, obj2) {
             var pos1 = obj1.position();
             var pos2 = obj2.position();
             var left1 = pos1.left;
@@ -199,7 +199,7 @@ $(function() {
             var top2 = pos2.top;
             var bottom2 = top2 + obj2.height();
             return ((right1 > left2 && (bottom1 > top2 && top1 < bottom2)) && (left1 < right2 && (top1 < bottom2 && bottom1 > top2)));
-        };
+        };*/
 
         b.checkHits = function () {
             if (!paused) {
@@ -209,7 +209,7 @@ $(function() {
                 b.BRY = $bsel.position().top + $bsel.height();
 
                 for (var p = 0; p < playerArray.length; p += 1) {
-                    if (b.checkCollision($(playerArray[p].ID), $bsel)) {
+                    if (checkCollision($(playerArray[p].ID), $bsel)) {
                         console.log('Collision! You lose!');
                         initDiploid();
                         break;
@@ -257,6 +257,20 @@ $(function() {
         for (var i = 1; i <= num; i += 1) {
             newBlock();
         }
+    }
+
+    function checkCollision (obj1, obj2) {
+        var pos1 = obj1.position();
+        var pos2 = obj2.position();
+        var left1 = pos1.left;
+        var right1 = left1 + obj1.width();
+        var top1 = pos1.top;
+        var bottom1 = top1 + obj1.height();
+        var left2 = pos2.left;
+        var right2 = left2 + obj2.width();
+        var top2 = pos2.top;
+        var bottom2 = top2 + obj2.height();
+        return ((right1 > left2 && (bottom1 > top2 && top1 < bottom2)) && (left1 < right2 && (top1 < bottom2 && bottom1 > top2)));
     }
 
     //create startGame for setInterval() in initDeploid()
