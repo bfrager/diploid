@@ -51,9 +51,11 @@ $(function() {
         p.moveUp = false;
         p.moveDown = false;
 
+        $diploid.append('<div class="orb" id="' + selectorID + '"></div>');
+
         //create ghost divs for each player to 'move ahead' and see if moves are 'valid'
         $diploid.append('<div id="' + ghostID + '" class="ghost"></div>');
-        p.g = $('#' + ghostID);
+        p.g = '#' + ghostID;
 
         $(p.g).css({'left': $(p.sel).position().left, 'top': $(p.sel).position().top});
 
@@ -124,6 +126,10 @@ $(function() {
             }
         };
 
+        //add associated HTML selectors to this player's personal array
+        p.html = [p.sel, p.g];
+        console.log('Players personal array: ' + p.html);
+
         //add this player to the player array so that both players can be targeted together quickly
         playerArray.push(p);
     };
@@ -146,9 +152,7 @@ $(function() {
         $(b.sel).css('top', ($diploid.height()));
 
         //each block object has it's own intersect detection
-        b.checkCorners = function (x, y) {
-            return (((lineY2 - lineY1) * x) + ((lineX1 - lineX2) * y)) + ((lineX2 * lineY1) - (lineX1 * lineY2));
-        };
+        b.checkCorners = function (x, y) {return (((lineY2 - lineY1) * x) + ((lineX1 - lineX2) * y)) + ((lineX2 * lineY1) - (lineX1 * lineY2));};
 
         b.checkIntersection = function () {
             b.cornerCheckTL = b.checkCorners(b.BLX, b.BRY);
@@ -191,7 +195,7 @@ $(function() {
 
                 for (var p = 0; p < playerArray.length; p += 1) {
                     if (b.checkCollision($(playerArray[p].sel), $(b.sel))) {
-                        //console.log(playerArray[p].name);
+                        console.log(playerArray[p]);
                     }
                 }
             }
@@ -304,15 +308,17 @@ $(function() {
 
         if(startGame) {
             clearInterval(startGame);
+            $body.unbind('keydown');
+            $body.unbind('keyup');
         }
 
+        clearBlocks();
+        generateBlocks(blockAmount);
+
+        //create players on game start
         p1 = new Player('p1', 'ghost1', 65, 68, 87, 83);
         p2 = new Player('p2', 'ghost2', 37, 39, 38, 40);
         alignLine();
-
-        clearBlocks();
-
-        generateBlocks(blockAmount);
 
         start = new Date();
 
@@ -328,10 +334,7 @@ $(function() {
         if(evt.which == 32){
             console.log('Should restart now!');
             evt.preventDefault();
-            $body.unbind('keydown');
-            $body.unbind('keyup');
             initDiploid();
-            console.log(blockArray);
         }
     });
     initDiploid();
