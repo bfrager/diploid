@@ -3,6 +3,8 @@ $(function() {
     var $diploid = $('#diploid');
     var $time = $('#time');
 
+    var $promptStart = $('#start-prompt');
+
     var p1;
     var p2;
 
@@ -355,8 +357,14 @@ $(function() {
     $body.on('keypress', function(evt){
         if(evt.which == 32){
             evt.preventDefault();
-            initDiploid();
+            gameStarted = true;
+            if(gameStarted) {
+                $promptStart.fadeOut();
+                initDiploid();
+            } else {
+                //promptStart();
+            }
         }
     });
-    initDiploid();
+    //initDiploid();
 });

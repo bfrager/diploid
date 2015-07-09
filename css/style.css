@@ -19,6 +19,19 @@ body {
   color: #FFF;
   display: none; }
 
+#start-prompt {
+  position: absolute;
+  z-index: 1001;
+  height: 100%;
+  background: #333;
+  width: 100%;
+  color: #FFF;
+  text-align: center; }
+
+#start-prompt h1 {
+  text-align: center;
+  color: #FFF; }
+
 .orb, .ghost {
   position: absolute;
   border-radius: 100px;
@@ -63,5 +76,13 @@ svg {
 path {
   position: absolute;
   left: 500px; }
+
+.p-control {
+  width: 50%;
+  float: left;
+  text-align: center; }
+
+img.pControl {
+  max-width: 250px; }
 
 /*# sourceMappingURL=style.css.map */
