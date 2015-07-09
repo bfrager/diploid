@@ -247,6 +247,10 @@ $(function() {
         blockArray.push(b);
     };
 
+    var Coin = function () {
+        //$diploid.append();
+    };
+
     function newBlock() {
         var blockID = 'block' + blockCount;
         var block = new Block(blockID);
