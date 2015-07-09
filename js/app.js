@@ -24,7 +24,7 @@ $(function() {
     var grid = 75;
     var blockAmount = 15;
     var blockCount = 0;
-    var blockSpeed = 1;
+    var blockDuration = 7000;
 
     var start;
     var elapsedTime = 0;
@@ -209,15 +209,13 @@ $(function() {
                     step: function(){
                         b.checkHits();
                     },
-                    duration: 5000,
+                    duration: blockDuration,
                     easing: 'linear',
                     complete: function(){
                         b.regen();
                     }
                 }
             )}
-
-        moveBlockUp(b);
 
         b.regen = function () {
             //console.log(blockArray);
@@ -228,6 +226,7 @@ $(function() {
             b = null;
         };
         blockArray.push(b);
+        moveBlockUp(b);
     };
 
     function newBlock() {
@@ -242,8 +241,6 @@ $(function() {
             newBlock();
         }
     }
-
-
 
     //create startGame for setInterval() in initDeploid()
     var startGame = null;
@@ -317,6 +314,10 @@ $(function() {
             console.log('Should pause now!');
             evt.preventDefault();
             if(!paused) {
+                console.log(blockArray);
+                $.each(blockArray,function(i){
+                    $(blockArray[i].sel).stop(true,false);
+                });
                 paused = true;
             }else {
                 paused = false;
