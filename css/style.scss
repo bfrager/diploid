@@ -1,0 +1,105 @@
+body {
+  margin:0;
+  padding:0;
+}
+
+#diploid {
+  width:100%;
+  height:600px;
+  background:#999;
+  margin:0 auto;
+  position:relative;
+
+//  for debugging
+  overflow:hidden;
+}
+
+#hud {
+  position: absolute;
+  z-index: 1000;
+  width: 100%;
+  height: 100px;
+  background: rgba(0, 0, 0, .5);
+  color: #FFF;
+
+  display:none;
+}
+
+#start-prompt {
+  position:absolute;
+  z-index:1001;
+  height:100%;
+  background:#333;
+  width:100%;
+  color:#FFF;
+  text-align:center;
+}
+
+#start-prompt h1 {
+  text-align:center;
+  color:#FFF;
+}
+
+
+.orb, .ghost {
+  position:absolute;
+  border-radius:100px;
+  width:25px;
+  height:25px;
+}
+
+#p1 {
+  background: #55154a;
+  left:0;
+  top:0;
+}
+
+#p2 {
+  background: #2a668a;
+  left:0;
+  top:0;
+}
+
+.ghost {
+  visibility:hidden;
+}
+
+svg {
+  width:100%;
+  height:100%;
+}
+#line {
+  stroke: rgb(255, 37, 0);
+  stroke-width:2;
+}
+
+#testBlock {
+  background: #ee6e4d;
+  position: absolute;
+  left: 250px;
+  top: 350px;
+  width: 100px;
+  height: 100px;
+}
+
+.block {
+  background: #ee6e4d;
+  position: absolute;
+  top: 350px;
+  border:1px solid;
+}
+
+path {
+  position: absolute;
+  left: 500px;
+}
+
+//player controls:
+.p-control {
+  width:50%;
+  float:left;
+  text-align:center;
+}
+img.pControl {
+  max-width:250px;
+}
