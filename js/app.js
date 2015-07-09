@@ -174,6 +174,7 @@ $(function() {
                 return false;
             } else {
                 console.log('LINE IS CURRENTLY INTERSECTING');
+                initDiploid();
             }
         };
 
@@ -198,13 +199,14 @@ $(function() {
                 b.TRX = $(b.sel).position().left + $(b.sel).width();
                 b.BRY = $(b.sel).position().top + $(b.sel).height();
 
-                b.checkIntersection();
-
                 for (var p = 0; p < playerArray.length; p += 1) {
                     if (b.checkCollision($(playerArray[p].sel), $(b.sel))) {
-                        console.log('COLLISION DETECTED')
+                        //console.log('COLLISION DETECTED');
+                        initDiploid();
+                        break;
                     }
                 }
+                b.checkIntersection();
             }
         };
         //gets fired ONCE because jQuery animate has its own setInterval steps
