@@ -7,6 +7,7 @@ $(function() {
     var p2;
 
     var paused = false;
+    var gameStarted = false;
 
     //line
     var line = $('#line');
@@ -23,18 +24,21 @@ $(function() {
     var blockArray = [];
 
     var grid = 75;
-    var blockAmount = 3;
+    var blockAmount = 5;
     var blockCount = 0;
     var blockDuration = 4000;
 
+
+
     var start;
-    var elapsedTime = 0;
-    var timer;
+    /*var elapsedTime = 0;
+    var timer;*/
 
     //for timer
     /*var m = 0;
      var s = 0;*/
 
+    //PLAYER OBJECT
     var Player = function (selectorID, ghostID, lKeyCode, rKeyCode, uKeyCode, dKeyCode) {
         var p = this;
         p.sel = '#' + selectorID;
@@ -60,44 +64,49 @@ $(function() {
         $(p.g).css({'left': $(p.sel).position().left, 'top': $(p.sel).position().top});
 
         //player control key bindings
-        $body.keydown(function (e) {
-            var p1k = e.which;
-            if (p1k == lKeyCode) {
-                e.preventDefault();
+
+        p.keyDown = function (evt) {
+            var pk = evt.which;
+            if (pk == lKeyCode) {
+                evt.preventDefault();
                 p.moveLeft = true
             }
-            if (p1k == rKeyCode) {
-                e.preventDefault();
+            if (pk == rKeyCode) {
+                evt.preventDefault();
                 p.moveRight = true
             }
-            if (p1k == uKeyCode) {
-                e.preventDefault();
+            if (pk == uKeyCode) {
+                evt.preventDefault();
                 p.moveUp = true
             }
-            if (p1k == dKeyCode) {
-                e.preventDefault();
+            if (pk == dKeyCode) {
+                evt.preventDefault();
                 p.moveDown = true
             }
-        });
-        $body.keyup(function (e) {
-            var p1k = e.which;
-            if (p1k == lKeyCode) {
-                e.preventDefault();
+        };
+
+        p.keyUp = function (evt) {
+            var pk = evt.which;
+            if (pk == lKeyCode) {
+                evt.preventDefault();
                 p.moveLeft = false
             }
-            if (p1k == rKeyCode) {
-                e.preventDefault();
+            if (pk == rKeyCode) {
+                evt.preventDefault();
                 p.moveRight = false
             }
-            if (p1k == uKeyCode) {
-                e.preventDefault();
+            if (pk == uKeyCode) {
+                evt.preventDefault();
                 p.moveUp = false
             }
-            if (p1k == dKeyCode) {
-                e.preventDefault();
+            if (pk == dKeyCode) {
+                evt.preventDefault();
                 p.moveDown = false
             }
-        });
+        };
+
+        $body.on('keydown', p.keyDown);
+        $body.on('keyup',p.keyUp);
 
         p.move = function () {
             var pMoved = 0;
@@ -128,13 +137,12 @@ $(function() {
 
         //add associated HTML selectors to this player's personal array
         p.html = [p.sel, p.g];
-        console.log('Players personal array: ' + p.html);
 
         //add this player to the player array so that both players can be targeted together quickly
         playerArray.push(p);
     };
 
-    //block object
+    //BLOCK OBJECT
     var Block = function (selectorID) {
         var b = this;
         b.sel = '#' + selectorID;
@@ -165,8 +173,7 @@ $(function() {
             } else if ((lineX1 > b.TRX && lineX2 > b.TRX) || (lineX1 < b.BLX && lineX2 < b.BLX) || ((lineY1 > b.BRY && lineY2 > b.BRY)) || (lineY1 < b.TLY && lineY2 < b.TLY)) {
                 return false;
             } else {
-                //do something when line gets interrupted
-                console.log('COLLISION DETECTED');
+                console.log('LINE IS CURRENTLY INTERSECTING');
             }
         };
 
@@ -195,7 +202,7 @@ $(function() {
 
                 for (var p = 0; p < playerArray.length; p += 1) {
                     if (b.checkCollision($(playerArray[p].sel), $(b.sel))) {
-                        console.log(playerArray[p]);
+                        console.log('COLLISION DETECTED')
                     }
                 }
             }
@@ -204,9 +211,7 @@ $(function() {
         function moveBlockUp(who) {
             var randomStartTime = Math.floor(Math.random() * $diploid.height()) * grid/4;
             $(who.sel).delay(randomStartTime).animate(
-                {
-                    'top': ($(who.sel).height() * -1)
-                },
+                {'top': ($(who.sel).height() * -1)},
                 {
                     step: function(){
                         b.checkHits();
@@ -220,22 +225,21 @@ $(function() {
             )}
 
         b.regen = function () {
-            //console.log(blockArray);
             blockArray.shift();
             b.alive = false;
-            newBlock();
             $(b.sel).remove();
             b = null;
+            newBlock();
         };
-        blockArray.push(b);
+
         moveBlockUp(b);
+        blockArray.push(b);
     };
 
     function newBlock() {
-        blockCount += 1;
-        //console.log('Block Count: ' + blockCount);
         var blockID = 'block' + blockCount;
         var block = new Block(blockID);
+        blockCount += 1;
     }
 
     function generateBlocks(num) {
@@ -296,47 +300,54 @@ $(function() {
 
     //clear all blocks
     function clearBlocks() {
-        $('.block').stop(true,true).remove();
-        for(var i = 0; i < blockArray.length; i += 1) {
-            blockArray[i] = null;
-        }
+        $('.block').clearQueue().stop().remove();
         blockArray = [];
     }
 
     //initialize the game
     function initDiploid() {
-
-        if(startGame) {
-            clearInterval(startGame);
-            $body.unbind('keydown');
-            $body.unbind('keyup');
-        }
-
         clearBlocks();
-        generateBlocks(blockAmount);
+        clearInterval(startGame);
+        for(var i = 0; i < playerArray.length; i += 1) {
+            playerArray[i].moveLeft = false;
+            playerArray[i].moveRight = false;
+            playerArray[i].moveUp = false;
+            playerArray[i].moveDown = false;
+
+            for(var p = 0; p < playerArray[i].html.length; p += 1){
+                $(playerArray[i].html[p]).remove();
+            }
+            $body.off('keydown',playerArray[i].keyDown);
+            $body.off('keyup',playerArray[i].keyUp);
+        }
 
         //create players on game start
         p1 = new Player('p1', 'ghost1', 65, 68, 87, 83);
         p2 = new Player('p2', 'ghost2', 37, 39, 38, 40);
         alignLine();
 
-        start = new Date();
+        generateBlocks(blockAmount);
 
+        startGame = setInterval(tick, 10);
+        gameStarted = true;
+
+        //timer code
+        /*
+        start = new Date();
         timer = setInterval(function(){
             var now = new Date();
             elapsedTime = Math.floor((now - start)/1000);
-            $time.html(elapsedTime)},1000);
-        startGame = setInterval(tick, 10);
+            $time.html(elapsedTime)},
+            1000
+        );
+        */
     }
-
     //restart game with spacebar
     $body.on('keypress', function(evt){
         if(evt.which == 32){
-            console.log('Should restart now!');
             evt.preventDefault();
             initDiploid();
         }
     });
     initDiploid();
-
 });
