@@ -60,30 +60,38 @@ $(function() {
         $body.keydown(function (e) {
             var p1k = e.which;
             if (p1k == lKeyCode) {
+                e.preventDefault();
                 p.moveLeft = true
             }
             if (p1k == rKeyCode) {
+                e.preventDefault();
                 p.moveRight = true
             }
             if (p1k == uKeyCode) {
+                e.preventDefault();
                 p.moveUp = true
             }
             if (p1k == dKeyCode) {
+                e.preventDefault();
                 p.moveDown = true
             }
         });
         $body.keyup(function (e) {
-            var p1k = e.keyCode;
+            var p1k = e.which;
             if (p1k == lKeyCode) {
+                e.preventDefault();
                 p.moveLeft = false
             }
             if (p1k == rKeyCode) {
+                e.preventDefault();
                 p.moveRight = false
             }
             if (p1k == uKeyCode) {
+                e.preventDefault();
                 p.moveUp = false
             }
             if (p1k == dKeyCode) {
+                e.preventDefault();
                 p.moveDown = false
             }
         });
@@ -174,7 +182,7 @@ $(function() {
             return ((right1 > left2 && (bottom1 > top2 && top1 < bottom2)) && (left1 < right2 && (top1 < bottom2 && bottom1 > top2)));
         };
 
-        b.moveBlock = function () {
+        b.checkHits = function () {
             if (!paused) {
                 b.BLX = $(b.sel).position().left;
                 b.TLY = $(b.sel).position().top;
@@ -199,7 +207,7 @@ $(function() {
                 },
                 {
                     step: function(){
-                        //console.log('STEP!');
+                        b.checkHits();
                     },
                     duration: 5000,
                     easing: 'linear',
@@ -211,11 +219,9 @@ $(function() {
 
         moveBlockUp(b);
 
-        b.tick = setInterval(b.moveBlock, 10);
         b.regen = function () {
             //console.log(blockArray);
             blockArray.shift();
-            clearInterval(b.tick);
             b.alive = false;
             newBlock();
             $(b.sel).remove();
@@ -307,8 +313,8 @@ $(function() {
 
     //pause/unpause game with spacebar
     $body.on('keypress', function(evt){
-        //console.log(evt);
         if(evt.which == 32){
+            console.log('Should pause now!');
             evt.preventDefault();
             if(!paused) {
                 paused = true;
