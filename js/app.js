@@ -1,7 +1,7 @@
 $(function() {
     var $body = $('body');
     var $diploid = $('#diploid');
-    var $time = $('#time');
+    var $time = $('#time-number');
 
     var $promptStart = $('#start-prompt');
 
@@ -30,15 +30,61 @@ $(function() {
     var blockCount = 0;
     var blockDuration = 4000;
 
-
-
     var start;
-    /*var elapsedTime = 0;
-    var timer;*/
+    var score = 0;
+    var $score = $('#score-number');
+    var elapsedTime = 0;
+    var timer;
 
+    var coinWorth = 1000;
     //for timer
-    /*var m = 0;
-     var s = 0;*/
+   /* var m = 0;
+    var s = 0;*/
+
+    function addScore(points){
+        score += points;
+        $score.html(score);
+    }
+
+
+    var Coin = function () {
+        $diploid.append('<div class="coin"></div>');
+        var c = this;
+        //c.sel = '#' + coinID;
+        c.birthday = new Date();
+        var $coin = $('.coin');
+
+        c.worth = coinWorth;
+
+        $coin.css({
+            top: ($coin.height() + (Math.random() * ($diploid.height() - $coin.height()))),
+            left: ($coin.width() + (Math.random() * ($diploid.width() - $coin.width())))
+        });
+
+        function coinHitCheck() {
+            for(var p = 0; p < playerArray.length; p += 1){
+                if(checkCollision($(playerArray[p].ID),$coin)) {
+                    //console.log('Coin!');
+                    clearInterval(c.tick);
+                    addScore(c.worth);
+                    $coin.fadeOut(function(){
+                        $coin.remove();
+                        //c = null;
+                        spawnCoin();
+                    });
+                    break;
+                }
+            }
+        }
+
+        console.log(this);
+        c.tick = setInterval(coinHitCheck,10);
+
+    };
+
+    function spawnCoin() {
+        var newCoin = new Coin();
+    }
 
     //PLAYER OBJECT
     var Player = function (selectorID, ghostID, lKeyCode, rKeyCode, uKeyCode, dKeyCode) {
@@ -162,7 +208,6 @@ $(function() {
 
         b.alive = true;
 
-
         $bsel.css({'left': b.l});
         $bsel.css('width', b.w);
         $bsel.css('height', b.h);
@@ -186,20 +231,6 @@ $(function() {
                 initDiploid();
             }
         };
-
-        /*b.checkCollision = function (obj1, obj2) {
-            var pos1 = obj1.position();
-            var pos2 = obj2.position();
-            var left1 = pos1.left;
-            var right1 = left1 + obj1.width();
-            var top1 = pos1.top;
-            var bottom1 = top1 + obj1.height();
-            var left2 = pos2.left;
-            var right2 = left2 + obj2.width();
-            var top2 = pos2.top;
-            var bottom2 = top2 + obj2.height();
-            return ((right1 > left2 && (bottom1 > top2 && top1 < bottom2)) && (left1 < right2 && (top1 < bottom2 && bottom1 > top2)));
-        };*/
 
         b.checkHits = function () {
             if (!paused) {
@@ -247,9 +278,7 @@ $(function() {
         blockArray.push(b);
     };
 
-    var Coin = function () {
-        //$diploid.append();
-    };
+
 
     function newBlock() {
         var blockID = 'block' + blockCount;
@@ -278,7 +307,7 @@ $(function() {
     }
 
     //create startGame for setInterval() in initDeploid()
-    var startGame = null;
+    var gamePlay = null;
 
     function alignLine() {
         //retrieve each player's updated center point bedore aligning the line
@@ -324,6 +353,8 @@ $(function() {
                 playerArray[i].move();
             }
             alignLine();
+            //score += 1;
+            $score.html(score);
         }
     }
 
@@ -335,8 +366,11 @@ $(function() {
 
     //initialize the game
     function initDiploid() {
+        score = 0;
+        console.log(score);
         clearBlocks();
-        clearInterval(startGame);
+        clearInterval(gamePlay);
+        clearInterval(timer);
         for(var i = 0; i < playerArray.length; i += 1) {
             playerArray[i].moveLeft = false;
             playerArray[i].moveRight = false;
@@ -357,32 +391,32 @@ $(function() {
 
         generateBlocks(blockAmount);
 
-        startGame = setInterval(tick, 10);
+        gamePlay = setInterval(tick, 10);
         gameStarted = true;
+        elapsedTime = 0;
+        $time.html(elapsedTime);
 
         //timer code
-        /*
         start = new Date();
-        timer = setInterval(function(){
+        function elapseTime() {
             var now = new Date();
             elapsedTime = Math.floor((now - start)/1000);
-            $time.html(elapsedTime)},
-            1000
-        );
-        */
+            $time.html(elapsedTime)
+        }
+        timer = setInterval(elapseTime, 1000);
+        spawnCoin();
     }
     //restart game with spacebar
     $body.on('keypress', function(evt){
         if(evt.which == 32){
             evt.preventDefault();
-            gameStarted = true;
-            if(gameStarted) {
+            /*gameStarted = true;
+            if(gameStarted) {*/
                 $promptStart.fadeOut();
                 initDiploid();
-            } else {
+            /*} else {*/
                 //promptStart();
-            }
+            /*}*/
         }
     });
-    //initDiploid();
 });
