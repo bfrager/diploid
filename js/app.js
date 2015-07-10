@@ -233,6 +233,7 @@ $(function() {
                 console.log('The Line Broke! Both players lose');
                 for(var p = 0; p < playerArray.length; p += 1) {
                     playerArray[p].lives -= 1;
+                    playerArray[p].scoreScreen.html(playerArray[p].lives);
                     console.log(playerArray[p].name + ' has ' + playerArray[p].lives + ' lives now.');
                 }
                 startRound();
@@ -359,7 +360,6 @@ $(function() {
             for(var i = 0; i < playerArray.length; i += 1) {
                 playerArray[i].move();
                 playerArray[i].score += 1;
-                playerArray[i].scoreScreen.html(playerArray[i].score);
             }
             alignLine();
         }
