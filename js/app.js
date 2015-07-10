@@ -249,6 +249,7 @@ $(function() {
                 for (var p = 0; p < playerArray.length; p += 1) {
                     if (checkCollision($(playerArray[p].ID), $bsel)) {
                         playerArray[p].lives -= 1;
+                        playerArray[p].score -= 100;
                         console.log(playerArray[p].name + 'has ' + playerArray[p].lives + ' lives!');
                         startRound();
                         break;
@@ -361,8 +362,6 @@ $(function() {
                 playerArray[i].scoreScreen.html(playerArray[i].score);
             }
             alignLine();
-            /*score += 1;
-            $score.html(score);*/
         }
     }
 
@@ -379,6 +378,7 @@ $(function() {
 
         //create players on first game
         if(isFirstGame){
+            $('.orb').clearQueue().stop(true,true).remove();
             playerArray = [];
             p1 = new Player('p1', 'ghost1', 65, 68, 87, 83,p1StartingX,$p1score);
             p2 = new Player('p2', 'ghost2', 37, 39, 38, 40,p2StartingX,$p2score);
@@ -409,26 +409,55 @@ $(function() {
             $body.off('keydown', playerArray[p].keyDown);
             $body.off('keyup', playerArray[p].keyUp);
 
-            $(playerArray[p].ID+','+playerArray[p].g).animate(
-                {
-                    top: $diploid.height()/2,
-                    left: playerArray[p].startingX
-                },
-                {
-                    duration: 600,
-                    complete: rebind(p)
-                }
-            );
-            if(playerArray[p].lives == 0) {
+            if(!playerArray[p].lives == 0) {
+                $(playerArray[p].ID+','+playerArray[p].g).animate(
+                    {
+                        top: $diploid.height()/2,
+                        left: playerArray[p].startingX
+                    },
+                    {
+                        duration: 600,
+                        complete: rebind(p)
+                    }
+                );
+            } else {
                 console.log('GAME OVER!!!!!');
+                clearBlocks();
+                function clearGamePlay() {
+                    clearInterval(gamePlay);
+                    console.log('Game play cleared');
+                    isFirstGame = true;
+                }
+                $(playerArray[p].ID+','+playerArray[p].g).animate(
+                    {
+                        top: $diploid.height()/2,
+                        left: playerArray[p].startingX
+                    },
+                    {
+                        duration: 600,
+                        complete: clearGamePlay
+                    }
+                );
+
                 checkWinner();
                 //bring overlay to announce winner
             }
+
         }
     }
 
     function checkWinner() {
-
+        var scoreArray = [];
+        for(var p = 0; p < playerArray.length; p += 1) {
+            scoreArray.push(playerArray[p].score);
+        }
+        if(scoreArray[0] > scoreArray[1]){
+            console.log('Player 1 Wins!');
+        }else if(scoreArray[0] < scoreArray[1]) {
+            console.log('Player 2 Wins!');
+        } else {
+            console.log('You both need to work on your team skills.');
+        }
     }
     //restart game with spacebar
     $body.on('keypress', function(evt){
