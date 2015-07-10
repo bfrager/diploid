@@ -4,15 +4,33 @@
 
 A two-player cooperative game, where incoming obstacles must be dodged to earn a high score. Rather than competing against an opponent, players must work together and coordinate path routes to stay alive.
 
-Each player controls a single orb. The player's orbs are linked together by a beam that must stay out of the path of incoming blocks. The longer the beam stays uninterrupted, the higher the score achieved, and the harder the game gets.
+Each player steers their orb to avoid hitting incoming obstacles. The player's orbs are linked together by a beam that must also stay out of the path of incoming obstacles. Each collision takes players' health down, and if a player's health reaches 0, the other player wins.
 
-## Controls
+### Controls
 
 Player 1 moves their orb up, left, down, and right with the W,A,S,D keys respectively.
 
 Player 2 moves their orb up, left, down, and right with the arrow keys respectively.
 
+Spacebar to start, or restart.
+
 ![alt tag](https://github.com/philuchansky/diploid/blob/master/mockup/diploidMockup01.png)
+
+## To Play
+Visit [http://philuchansky.github.io/diploid/](http://philuchansky.github.io/diploid/) to play, or simply download a .zip of this repo and open index.html in your browser.
+
+### Development process
+Technologies used: HTML / CSS / Javascript + JQuery
+
+By creating a 'block' and 'player' objects in Javascript, the game is able to randomly generate obstacles with their own collision detection, that spontaneously regenerate and 'destroy' themselves once they leave the screen to try and keep memory usage down.
+
+JQuery and CSS transitions allow for all of the animations to remain fluid, although it's possible that CPU usage can still be high since the game isn't optimized for performace.
+
+### Not-Yet-Implemented
+- self-increasing difficulty. Currently set to low difficulty and the game does not gradually become harder yet.
+- Sound FX
+- Detailed orb artwork/design
+ 
 
 # User Stories
 
