@@ -28,7 +28,8 @@ body, html {
   width: 100%;
   background: rgba(0, 0, 0, 0.5);
   color: #FFF;
-  padding: 20px 0; }
+  padding: 20px 0;
+  text-transform: uppercase; }
 
 #start-prompt {
   position: absolute;

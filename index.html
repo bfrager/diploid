@@ -37,8 +37,6 @@
             <h2>Press Space Bar to start again.</h2>
         </div>
         <div id="hud">
-           <!-- <div id="p1score">Player 1 Health: <span id="p1-health"></span></div>
-            <div id="p2score">Player 2 Health: <span id="p2-health"></span></div>-->
             <div id="p1Title">Player 1</div>
             <div id="p1HealthBar" class="health-bar"><div class="health"></div></div>
             <div id="p2Title">Player 2</div>
@@ -46,11 +44,11 @@
         </div>
         <svg id="svg">
             <filter id="dropshadow" height="130%">
-                <feGaussianBlur in="SourceAlpha" stdDeviation="5"/> <!-- stdDeviation is how much to blur -->
-                <feOffset dx="2" dy="2" result="offsetblur"/> <!-- how much to offset -->
+                <feGaussianBlur in="SourceAlpha" stdDeviation="5"/>
+                <feOffset dx="2" dy="2" result="offsetblur"/>
                 <feMerge>
-                    <feMergeNode/> <!-- this contains the offset blurred image -->
-                    <feMergeNode in="SourceGraphic"/> <!-- this contains the element that the filter is applied to -->
+                    <feMergeNode/>
+                    <feMergeNode in="SourceGraphic"/>
                 </feMerge>
             </filter>
             <line id="line" x1="0" y1="0" x2="200" y2="200" style="filter:url(#dropshadow)"></line>
