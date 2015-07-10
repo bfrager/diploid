@@ -353,7 +353,7 @@ $(function() {
                 playerArray[i].move();
             }
             alignLine();
-            //score += 1;
+            score += 1;
             $score.html(score);
         }
     }
@@ -366,7 +366,6 @@ $(function() {
 
     //initialize the game
     function initDiploid() {
-        score = 0;
         console.log(score);
         clearBlocks();
         clearInterval(gamePlay);
@@ -410,13 +409,8 @@ $(function() {
     $body.on('keypress', function(evt){
         if(evt.which == 32){
             evt.preventDefault();
-            /*gameStarted = true;
-            if(gameStarted) {*/
-                $promptStart.fadeOut();
-                initDiploid();
-            /*} else {*/
-                //promptStart();
-            /*}*/
+            $promptStart.fadeOut();
+            initDiploid();
         }
     });
 });
