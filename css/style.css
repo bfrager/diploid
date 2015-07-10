@@ -1,10 +1,11 @@
-body {
+body, html {
   margin: 0;
-  padding: 0; }
+  padding: 0;
+  height: 100%; }
 
 #diploid {
   width: 100%;
-  height: 600px;
+  height: 100%;
   background: #999;
   margin: 0 auto;
   position: relative;
@@ -69,7 +70,8 @@ svg {
 
 #line {
   stroke: #ff2500;
-  stroke-width: 2; }
+  stroke-width: 2;
+  animation: strokePulse 0.5s infinite !important; }
 
 #testBlock {
   background: #ee6e4d;
@@ -98,15 +100,6 @@ path {
 img.pControl {
   max-width: 250px; }
 
-.coin {
-  width: 25px;
-  height: 25px;
-  position: absolute;
-  background: yellow;
-  left: 300px;
-  /*top:100px;*/
-  z-index: 0; }
-
 .winning-dance {
   -webkit-animation: winnerDanceAnim 1s infinite !important;
   animation: winnerDanceAnim 1s infinite !important; }
@@ -116,28 +109,37 @@ img.pControl {
   0% {
     -webkit-transform: scale(2);
     transform: scale(2);
-    animation-timing-function: ease-in; }
+    animation-timing-function: ease-in-out; }
   50% {
     -webkit-transform: scale(0.8);
-    transform: scale(0.8); }
+    transform: scale(0.8);
+    animation-timing-function: ease-in-out; }
   100% {
     -webkit-transform: scale(2);
     transform: scale(2);
-    animation-timing-function: ease-out; } }
+    animation-timing-function: ease-in-out; } }
 @keyframes winnerDanceAnim {
   0% {
     -webkit-transform: scale(2);
     -ms-transform: scale(2);
     transform: scale(2);
-    animation-timing-function: ease-in; }
+    animation-timing-function: ease-in-out; }
   50% {
     -webkit-transform: scale(0.8);
     -ms-transform: scale(0.8);
-    transform: scale(0.8); }
+    transform: scale(0.8);
+    animation-timing-function: ease-in-out; }
   100% {
     -webkit-transform: scale(2);
     -ms-transform: scale(2);
     transform: scale(2);
-    animation-timing-function: ease-out; } }
+    animation-timing-function: ease-in-out; } }
+@keyframes strokePulse {
+  0% {
+    stroke-width: 4;
+    animation-timing-function: ease-in-out; }
+  100% {
+    stroke-width: 2;
+    animation-timing-function: ease-in-out; } }
 
 /*# sourceMappingURL=style.css.map */

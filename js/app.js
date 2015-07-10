@@ -401,6 +401,13 @@ $(function() {
         }
     }
 
+    function initializePlayerScores() {
+        for(var p = 0; p < pArray.length; p += 1) {
+            pArray[p].lives = startingLives;
+            pArray[p].scoreScreen.html(p.lives);
+        }
+    }
+
     function checkWinner() {
         var scoreArray = [];
         for(var p = 0; p < pArray.length; p += 1) {
@@ -428,6 +435,7 @@ $(function() {
             $promptStart.fadeOut();
             gameStarted = false;
             startRound();
+            initializePlayerScores();
         }
     });
 });

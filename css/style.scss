@@ -1,11 +1,12 @@
-body {
+body,html {
   margin:0;
   padding:0;
+  height:100%
 }
 
 #diploid {
   width:100%;
-  height:600px;
+  height:100%;
   background:#999;
   margin:0 auto;
   position:relative;
@@ -86,6 +87,8 @@ svg {
 #line {
   stroke: rgb(255, 37, 0);
   stroke-width:2;
+
+  animation: strokePulse .5s infinite!important;
 }
 
 #testBlock {
@@ -120,16 +123,6 @@ img.pControl {
   max-width:250px;
 }
 
-.coin {
-  width:25px;
-  height:25px;
-  position:absolute;
-  background:yellow;
-  left:300px;
-  /*top:100px;*/
-  z-index:0;
-}
-
 .winning-dance {
   -webkit-animation: winnerDanceAnim 1s infinite!important;
   animation: winnerDanceAnim 1s infinite!important;
@@ -138,18 +131,24 @@ img.pControl {
 //keyframes:
 /*winner dances*/
 @-webkit-keyframes winnerDanceAnim {
-  0% {-webkit-transform: scale(2.0);
+  0% {
+    -webkit-transform: scale(2.0);
     transform: scale(2.0);
-    animation-timing-function:ease-in-out;}
-
-  50% {-webkit-transform: scale(0.8);
-    transform: scale(0.8);
-    animation-timing-function:ease-in-out;}
-
-  100% {-webkit-transform: scale(2.0);
-    transform: scale(2.0);
-    animation-timing-function:ease-in-out;
+    animation-timing-function: ease-in-out;
   }
+
+  50% {
+    -webkit-transform: scale(0.8);
+    transform: scale(0.8);
+    animation-timing-function: ease-in-out;
+  }
+
+  100% {
+    -webkit-transform: scale(2.0);
+    transform: scale(2.0);
+    animation-timing-function: ease-in-out;
+  }
+}
 
 @keyframes winnerDanceAnim {
   0% {-webkit-transform: scale(2.0);
@@ -165,5 +164,13 @@ img.pControl {
   100% {-webkit-transform: scale(2.0);
     -ms-transform: scale(2.0);
     transform: scale(2.0);
+    animation-timing-function:ease-in-out;}
+}
+
+@keyframes strokePulse {
+  0% {stroke-width: 4;
+    animation-timing-function:ease-in-out;}
+
+  100% {stroke-width: 2;
     animation-timing-function:ease-in-out;}
 }
