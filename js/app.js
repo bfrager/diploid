@@ -6,12 +6,14 @@ $(function() {
     var $promptStart = $('#start-prompt');
 
     var p1;
+    var p1StartingX = $diploid.width() / 3;
+    var p2StartingX = $diploid.width() * (2/3);
     var p2;
 
     var paused = false;
     var gameStarted = false;
     var maxlives = 10;
-    var lives = 10;
+    var lives = 5;
 
     //line
     var $line = $('#line');
@@ -88,7 +90,7 @@ $(function() {
     }
 
     //PLAYER OBJECT
-    var Player = function (selectorID, ghostID, lKeyCode, rKeyCode, uKeyCode, dKeyCode) {
+    var Player = function (selectorID, ghostID, lKeyCode, rKeyCode, uKeyCode, dKeyCode, startingX) {
         $diploid.append('<div class="orb" id="' + selectorID + '"></div>');
 
 
@@ -96,6 +98,7 @@ $(function() {
         p.ID = '#' + selectorID;
         p.name = 'Player ' + selectorID;
         p.score = 0;
+        p.startingX = startingX;
 
         var $psel = $(p.ID);
 
@@ -159,8 +162,8 @@ $(function() {
             }
         };
 
-        $body.on('keydown', p.keyDown);
-        $body.on('keyup',p.keyUp);
+        /*$body.on('keydown', p.keyDown);
+        $body.on('keyup',p.keyUp);*/
 
         p.move = function () {
             var pMoved = 0;
@@ -374,49 +377,63 @@ $(function() {
         console.log('Lives remaining: ' + lives);
         clearBlocks();
         clearInterval(timer);
-        for(var i = 0; i < playerArray.length; i += 1) {
+        /*for(var i = 0; i < playerArray.length; i += 1) {
             playerArray[i].moveLeft = false;
             playerArray[i].moveRight = false;
             playerArray[i].moveUp = false;
             playerArray[i].moveDown = false;
-        }
+        }*/
+
+
 
         if(lives > 0) {
             //create players on game start
             if(!gameStarted){
                 playerArray = [];
-                p1 = new Player('p1', 'ghost1', 65, 68, 87, 83);
-                p2 = new Player('p2', 'ghost2', 37, 39, 38, 40);
+                p1 = new Player('p1', 'ghost1', 65, 68, 87, 83,p1StartingX);
+                p2 = new Player('p2', 'ghost2', 37, 39, 38, 40,p2StartingX);
                 alignLine();
                 gamePlay = setInterval(tick, 10);
             }
 
             generateBlocks(blockAmount);
-
-            //clearInterval(gamePlay);
-
             gameStarted = true;
-            elapsedTime = 0;
-            $time.html(elapsedTime);
-
-            //timer code
-            start = new Date();
-            function elapseTime() {
-                var now = new Date();
-                elapsedTime = Math.floor((now - start)/1000);
-                $time.html(elapsedTime)
-            }
-            timer = setInterval(elapseTime, 1000);
-            //spawnCoin();
         } else {
             console.log('No more lives');
 
-            $('#p1').animate({
-               top: $diploid.height()/2,
-               left: 200
-            });
+        }
+        centerPlayers();
+    }
+    function rebind(p) {
+        $body.on('keydown', playerArray[p].keyDown);
+        $body.on('keyup',playerArray[p].keyUp);
+    }
+
+    //temporarily remove mobility while animating, then re-enable;
+    function centerPlayers() {
+
+        for(var p = 0; p < playerArray.length; p += 1) {
+            playerArray[p].moveLeft = false;
+            playerArray[p].moveRight = false;
+            playerArray[p].moveUp = false;
+            playerArray[p].moveDown = false;
+
+            $body.off('keydown', playerArray[p].keyDown);
+            $body.off('keyup', playerArray[p].keyUp);
+
+            $(playerArray[p].ID+','+playerArray[p].g).animate(
+                {
+                    top: $diploid.height()/2,
+                    left: playerArray[p].startingX
+                },
+                {
+                    duration: 600,
+                    complete: rebind(p)
+                }
+            );
         }
     }
+
     //restart game with spacebar
     $body.on('keypress', function(evt){
         if(evt.which == 32){
