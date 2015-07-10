@@ -10,6 +10,7 @@ $(function() {
 
     var paused = false;
     var gameStarted = false;
+    var lives = 2;
 
     //line
     var $line = $('#line');
@@ -25,10 +26,10 @@ $(function() {
     var playerArray = [];
     var blockArray = [];
 
-    var grid = 75;
-    var blockAmount = 5;
+    var grid = 150;
+    var blockAmount = 15;
     var blockCount = 0;
-    var blockDuration = 4000;
+    var blockDuration = 2000;
 
     var start;
     var score = 0;
@@ -90,9 +91,11 @@ $(function() {
     var Player = function (selectorID, ghostID, lKeyCode, rKeyCode, uKeyCode, dKeyCode) {
         $diploid.append('<div class="orb" id="' + selectorID + '"></div>');
 
+
         var p = this;
         p.ID = '#' + selectorID;
         p.name = 'Player ' + selectorID;
+        p.score = 0;
 
         var $psel = $(p.ID);
 
@@ -242,6 +245,7 @@ $(function() {
                 for (var p = 0; p < playerArray.length; p += 1) {
                     if (checkCollision($(playerArray[p].ID), $bsel)) {
                         console.log('Collision! You lose!');
+                        lives -= 1;
                         initDiploid();
                         break;
                     }
@@ -351,6 +355,7 @@ $(function() {
         if(!paused) {
             for(var i = 0; i < playerArray.length; i += 1) {
                 playerArray[i].move();
+                playerArray[i].score += 1;
             }
             alignLine();
             score += 1;
@@ -366,9 +371,9 @@ $(function() {
 
     //initialize the game
     function initDiploid() {
-        console.log(score);
+        console.log(lives);
         clearBlocks();
-        clearInterval(gamePlay);
+        //clearInterval(gamePlay);
         clearInterval(timer);
         for(var i = 0; i < playerArray.length; i += 1) {
             playerArray[i].moveLeft = false;
@@ -376,41 +381,68 @@ $(function() {
             playerArray[i].moveUp = false;
             playerArray[i].moveDown = false;
 
-            for(var p = 0; p < playerArray[i].html.length; p += 1){
+            /*for(var p = 0; p < playerArray[i].html.length; p += 1){
                 $(playerArray[i].html[p]).remove();
-            }
+            }*/
+
+
+
             $body.off('keydown',playerArray[i].keyDown);
             $body.off('keyup',playerArray[i].keyUp);
         }
 
-        //create players on game start
-        p1 = new Player('p1', 'ghost1', 65, 68, 87, 83);
-        p2 = new Player('p2', 'ghost2', 37, 39, 38, 40);
-        alignLine();
+        if(lives > 0) {
+            //create players on game start
+            playerArray = [];
+            p1 = new Player('p1', 'ghost1', 65, 68, 87, 83);
+            p2 = new Player('p2', 'ghost2', 37, 39, 38, 40);
 
-        generateBlocks(blockAmount);
+            if(lives < 5) {
+                if(whoseTurn == 0) {
+                    whoseTurn = 1;
+                } else {
+                    whoseTurn = 0
+                }
+            } else {
+                //shuffle who starts the game;
+                var whoseTurn = (Math.floor(Math.random() * playerArray.length));
+            }
+            //console.log('Whose turn: '+ whoseTurn);
+            alignLine();
 
-        gamePlay = setInterval(tick, 10);
-        gameStarted = true;
-        elapsedTime = 0;
-        $time.html(elapsedTime);
+            generateBlocks(blockAmount);
 
-        //timer code
-        start = new Date();
-        function elapseTime() {
-            var now = new Date();
-            elapsedTime = Math.floor((now - start)/1000);
-            $time.html(elapsedTime)
+            gamePlay = setInterval(tick, 10);
+            gameStarted = true;
+            elapsedTime = 0;
+            $time.html(elapsedTime);
+
+            //timer code
+            start = new Date();
+            function elapseTime() {
+                var now = new Date();
+                elapsedTime = Math.floor((now - start)/1000);
+                $time.html(elapsedTime)
+            }
+            timer = setInterval(elapseTime, 1000);
+            //spawnCoin();
+        } else {
+            console.log('No more lives');
+            $('#p1').animate({
+               top: $diploid.height()/2,
+               left: 200
+            });
         }
-        timer = setInterval(elapseTime, 1000);
-        spawnCoin();
     }
     //restart game with spacebar
     $body.on('keypress', function(evt){
         if(evt.which == 32){
             evt.preventDefault();
             $promptStart.fadeOut();
+            clearInterval(gamePlay);
+            gamePlay = setInterval(tick,10);
             initDiploid();
         }
     });
+
 });
