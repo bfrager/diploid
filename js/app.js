@@ -27,7 +27,7 @@ $(function() {
     var lineP2 = [];
 
     //global speed
-    var speed = 3;
+    var speed = 4;
     var pArray = [];
     var blockArray = [];
 
@@ -321,8 +321,8 @@ $(function() {
 
     //clear all blocks
     function clearBlocks() {
-        //$('.block').clearQueue().stop().remove();
-        $('.block').clearQueue().stop();
+        $('.block').clearQueue().stop().remove();
+        //$('.block').clearQueue().stop();
         blockArray = [];
     }
 

@@ -6,7 +6,8 @@ body, html {
 #diploid {
   width: 100%;
   height: 100%;
-  background: #999;
+  background-image: url("../images/bg.jpg");
+  background-size: cover;
   margin: 0 auto;
   position: relative;
   overflow: hidden; }
@@ -22,14 +23,14 @@ body, html {
   position: absolute;
   z-index: 1001;
   height: 100%;
-  background: #333;
   width: 100%;
   color: #FFF;
-  text-align: center; }
-
-#start-prompt h1 {
   text-align: center;
-  color: #FFF; }
+  background-image: url("../images/bg.jpg");
+  background-size: cover; }
+  #start-prompt h1 {
+    text-align: center;
+    color: #FFF; }
 
 #winner {
   width: 100%;
@@ -37,25 +38,28 @@ body, html {
   background: rgba(0, 0, 0, 0.5);
   position: absolute;
   display: none; }
-
-#winner h1 {
-  color: #FFF;
-  text-align: center;
-  margin-top: 40px; }
+  #winner h1 {
+    color: #FFF;
+    text-align: center;
+    margin-top: 40px; }
 
 .orb, .ghost {
   position: absolute;
   border-radius: 100px;
-  width: 50px;
-  height: 50px; }
+  width: 65px;
+  height: 65px; }
 
 #p1 {
-  background: #55154a;
+  background: #80E7CE;
+  box-shadow: 0 0 14px #80E7CE;
+  border: 1px solid #999;
   left: 0;
   top: 0; }
 
 #p2 {
-  background: #2a668a;
+  background: #FF9C5F;
+  box-shadow: 0 0 14px #FF9C5F;
+  border: 1px solid #999;
   left: 0;
   top: 0; }
 
@@ -69,7 +73,7 @@ svg {
   height: 100%; }
 
 #line {
-  stroke: #ff2500;
+  stroke: #26a3d3;
   stroke-width: 2;
   animation: strokePulse 0.5s infinite !important; }
 
@@ -82,11 +86,15 @@ svg {
   height: 100px; }
 
 .block {
-  background: #ee6e4d;
+  background: url("../images/block.jpg");
   position: absolute;
   top: 350px;
-  border: 1px solid;
-  z-index: 1000; }
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  z-index: 1000;
+  box-shadow: 0 0 10px black;
+  border: 1px solid #444; }
 
 path {
   position: absolute;
