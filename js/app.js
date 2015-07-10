@@ -10,6 +10,7 @@ $(function() {
 
     var paused = false;
     var gameStarted = false;
+    var maxlives = 10;
     var lives = 10;
 
     //line
@@ -29,7 +30,7 @@ $(function() {
     var grid = 150;
     var blockAmount = 15;
     var blockCount = 0;
-    var blockDuration = 2000;
+    var blockDuration = 4000;
 
     var start;
     var score = 0;
@@ -65,7 +66,6 @@ $(function() {
         function coinHitCheck() {
             for(var p = 0; p < playerArray.length; p += 1){
                 if(checkCollision($(playerArray[p].ID),$coin)) {
-                    //console.log('Coin!');
                     clearInterval(c.tick);
                     addScore(c.worth);
                     $coin.fadeOut(function(){
@@ -371,7 +371,7 @@ $(function() {
 
     //initialize the game
     function initDiploid() {
-        console.log(lives);
+        console.log('Lives remaining: ' + lives);
         clearBlocks();
         clearInterval(timer);
         for(var i = 0; i < playerArray.length; i += 1) {
@@ -379,39 +379,22 @@ $(function() {
             playerArray[i].moveRight = false;
             playerArray[i].moveUp = false;
             playerArray[i].moveDown = false;
-
-            /*for(var p = 0; p < playerArray[i].html.length; p += 1){
-                $(playerArray[i].html[p]).remove();
-            }*/
-
-
-
-            $body.off('keydown',playerArray[i].keyDown);
-            $body.off('keyup',playerArray[i].keyUp);
         }
 
         if(lives > 0) {
             //create players on game start
-            playerArray = [];
-            p1 = new Player('p1', 'ghost1', 65, 68, 87, 83);
-            p2 = new Player('p2', 'ghost2', 37, 39, 38, 40);
-
-            if(lives < 5) {
-                if(whoseTurn == 0) {
-                    whoseTurn = 1;
-                } else {
-                    whoseTurn = 0
-                }
-            } else {
-                //shuffle who starts the game;
-                var whoseTurn = (Math.floor(Math.random() * playerArray.length));
+            if(!gameStarted){
+                playerArray = [];
+                p1 = new Player('p1', 'ghost1', 65, 68, 87, 83);
+                p2 = new Player('p2', 'ghost2', 37, 39, 38, 40);
+                alignLine();
+                gamePlay = setInterval(tick, 10);
             }
-            alignLine();
 
             generateBlocks(blockAmount);
 
-            clearInterval(gamePlay);
-            gamePlay = setInterval(tick, 10);
+            //clearInterval(gamePlay);
+
             gameStarted = true;
             elapsedTime = 0;
             $time.html(elapsedTime);
@@ -427,6 +410,7 @@ $(function() {
             //spawnCoin();
         } else {
             console.log('No more lives');
+
             $('#p1').animate({
                top: $diploid.height()/2,
                left: 200
@@ -438,8 +422,7 @@ $(function() {
         if(evt.which == 32){
             evt.preventDefault();
             $promptStart.fadeOut();
-            clearInterval(gamePlay);
-            //gamePlay = setInterval(tick,10);
+            //clearInterval(gamePlay);
             initDiploid();
         }
     });
