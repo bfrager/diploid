@@ -10,7 +10,7 @@ $(function() {
 
     var paused = false;
     var gameStarted = false;
-    var lives = 2;
+    var lives = 10;
 
     //line
     var $line = $('#line');
@@ -373,7 +373,6 @@ $(function() {
     function initDiploid() {
         console.log(lives);
         clearBlocks();
-        //clearInterval(gamePlay);
         clearInterval(timer);
         for(var i = 0; i < playerArray.length; i += 1) {
             playerArray[i].moveLeft = false;
@@ -407,11 +406,11 @@ $(function() {
                 //shuffle who starts the game;
                 var whoseTurn = (Math.floor(Math.random() * playerArray.length));
             }
-            //console.log('Whose turn: '+ whoseTurn);
             alignLine();
 
             generateBlocks(blockAmount);
 
+            clearInterval(gamePlay);
             gamePlay = setInterval(tick, 10);
             gameStarted = true;
             elapsedTime = 0;
@@ -440,7 +439,7 @@ $(function() {
             evt.preventDefault();
             $promptStart.fadeOut();
             clearInterval(gamePlay);
-            gamePlay = setInterval(tick,10);
+            //gamePlay = setInterval(tick,10);
             initDiploid();
         }
     });
