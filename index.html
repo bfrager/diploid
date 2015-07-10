@@ -14,7 +14,8 @@
 <body>
     <div id="diploid">
         <div id="start-prompt">
-            <h1>Hit Spacebar to Start</h1>
+            <h1>DIPLOID</h1>
+
             <div id="player-controls">
                 <div id="p1-controls" class="p-control">
                     <h3>Player 1 Controls</h3>
@@ -24,15 +25,24 @@
                     <h3>Player 2 Controls</h3>
                     <img class="pControl" src="images/p2Controls.png">
                 </div>
+                <div id="instructions">
+                    <h3>Use your controls to steer your orb out of harm's way. Work with your opponent to keep the beam out of danger too, or both of you will lose health!</h3>
+                </div>
             </div>
+            <h2>hit spacebar to start</h2>
         </div>
         <div id="hit-flicker"></div>
         <div id="winner">
             <h1></h1>
+            <h2>Press Space Bar to start again.</h2>
         </div>
         <div id="hud">
-            <div id="p1score">Player 1 Health: <span id="p1-health"></span></div>
-            <div id="p2score">Player 2 Health: <span id="p2-health"></span></div>
+           <!-- <div id="p1score">Player 1 Health: <span id="p1-health"></span></div>
+            <div id="p2score">Player 2 Health: <span id="p2-health"></span></div>-->
+            <div id="p1Title">Player 1</div>
+            <div id="p1HealthBar" class="health-bar"><div class="health"></div></div>
+            <div id="p2Title">Player 2</div>
+            <div id="p2HealthBar" class="health-bar"><div class="health"></div></div>
         </div>
         <svg id="svg">
             <filter id="dropshadow" height="130%">

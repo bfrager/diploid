@@ -15,18 +15,24 @@ body,html {
   padding:0;
   height:100%;
   font-family: 'edmondsansbold', sans-serif;
+  font-size:120%;
+  letter-spacing:1px;
 }
 
 #diploid {
   width:100%;
   height:100%;
   background-image:url('../images/bg.jpg');
-  background-size:cover;
+  //background-size:cover;
   margin:0 auto;
   position:relative;
 
 //  for debugging
   overflow:hidden;
+
+  -webkit-animation: bgAnim 5s infinite!important;
+  animation: bgAnim 5s infinite!important;
+
 }
 
 #hud {
@@ -35,6 +41,8 @@ body,html {
   width: 100%;
   background: rgba(0, 0, 0, .5);
   color: #FFF;
+
+  padding: 20px 0;
 
   //display:none;
 }
@@ -52,6 +60,52 @@ body,html {
     text-align:center;
     color:#FFF;
   }
+  h2 {
+    color:#80E7CE;
+  }
+}
+
+#instructions {
+  max-width: 700px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.health-bar {
+  height:30px;
+  width:300px;
+  background:#999;
+  //position:absolute;
+  top:20px;
+}
+.health {
+  height: 100%;
+  width: 100%;
+  //background: #F26964;
+}
+
+#p1HealthBar .health {
+  background-color:#80E7CE;
+}
+#p2HealthBar .health {
+  background-color: #FF9C5F;;
+}
+
+#p1Title {
+  float:left;
+  margin:0 20px 0 40px;
+}
+
+#p1HealthBar {
+  float:left;
+}
+
+#p2Title {
+  float:right;
+  margin:0 20px 0 40px;
+}
+#p2HealthBar {
+  float:right;
 }
 
 #hit-flicker {
@@ -69,10 +123,13 @@ body,html {
   background:rgba(0,0,0,.5);
   position:absolute;
   display:none;
+  z-index:10000;
+  color:#FFF;
+  text-align:center;
   h1 {
-    color:#FFF;
+
     text-align:center;
-    margin-top:40px;
+    margin-top:100px;
   }
 }
 
@@ -198,9 +255,29 @@ img.pControl {
 }
 
 @keyframes strokePulse {
-  0% {stroke-width: 4;
+  0% {stroke-width: 8;
     animation-timing-function:ease-in-out;}
 
-  100% {stroke-width: 2;
+  50% {stroke-width: 2;
     animation-timing-function:ease-in-out;}
+
+  100% {stroke-width: 8;
+    animation-timing-function:ease-in-out;}
+}
+
+
+@-webkit-keyframes bgAnim {
+  0% {background-position:0% 0%;
+    animation-timing-function:linear}
+
+  100% {background-position:0% 100%;
+    animation-timing-function:linear}
+}
+
+@keyframes bgAnim {
+  0% {background-position:0% 0%;
+    animation-timing-function:linear}
+
+  100% {background-position:0% 100%;
+    animation-timing-function:linear}
 }

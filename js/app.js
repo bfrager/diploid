@@ -35,14 +35,17 @@ $(function() {
     var grid = 150;
     var blockAmount = 15;
     var blockCount = 0;
-    var blockDuration = 4000;
+    var blockDuration = 3000;
 
     var start;
     var $p1score = $('#p1-health');
     var $p2score = $('#p2-health');
 
+    var $p1HealthBar = $('#p1HealthBar .health');
+    var $p2HealthBar = $('#p2HealthBar .health');
+
     //PLAYER OBJECT
-    var Player = function (selectorID, ghostID, lKeyCode, rKeyCode, uKeyCode, dKeyCode, startingX,scoreScreen) {
+    var Player = function (selectorID, ghostID, lKeyCode, rKeyCode, uKeyCode, dKeyCode, startingX, scoreScreen,healthBar) {
         $diploid.append('<div class="orb" id="' + selectorID + '"></div>');
 
         var p = this;
@@ -50,6 +53,7 @@ $(function() {
         p.name = 'Player ' + selectorID;
         p.score = 0;
         p.scoreScreen = scoreScreen;
+        p.healthBar = healthBar
         p.startingX = startingX;
         var $psel = $(p.ID);
 
@@ -190,7 +194,12 @@ $(function() {
                 for(var p = 0; p < pArray.length; p += 1) {
                     pArray[p].lives -= 1;
                     pArray[p].scoreScreen.html(pArray[p].lives);
+
                     console.log(pArray[p].name + ' has ' + pArray[p].lives + ' lives now.');
+                    pArray[p].health = ((pArray[p].lives / startingLives) * 100) + '%';
+                    $(pArray[p].healthBar).animate({
+                       width:  pArray[p].health
+                    });
                 }
                 startRound();
             }
@@ -206,8 +215,15 @@ $(function() {
                 for (var p = 0; p < pArray.length; p += 1) {
                     if (checkCollision($(pArray[p].ID), $bsel)) {
                         hitFlicker();
+
                         pArray[p].lives -= 1;
                         pArray[p].scoreScreen.html(pArray[p].lives);
+
+                        pArray[p].health = ((pArray[p].lives / startingLives) * 100) + '%';
+                        $(pArray[p].healthBar).animate({
+                            width:  pArray[p].health
+                        });
+
                         console.log(pArray[p].name + 'has ' + pArray[p].lives + ' lives!');
                         startRound();
                         break;
@@ -341,8 +357,8 @@ $(function() {
         if(isFirstGame){
             $('.orb').clearQueue().stop(true,true).remove();
             pArray = [];
-            p1 = new Player('p1', 'ghost1', 65, 68, 87, 83,p1StartingX,$p1score);
-            p2 = new Player('p2', 'ghost2', 37, 39, 38, 40,p2StartingX,$p2score);
+            p1 = new Player('p1', 'ghost1', 65, 68, 87, 83,p1StartingX,$p1score,$p1HealthBar);
+            p2 = new Player('p2', 'ghost2', 37, 39, 38, 40,p2StartingX,$p2score,$p2HealthBar);
             alignLine();
             gamePlay = setInterval(tick, 10);
             isFirstGame = false;
@@ -369,6 +385,8 @@ $(function() {
             pArray[p].moveRight = false;
             pArray[p].moveUp = false;
             pArray[p].moveDown = false;
+
+
 
             $body.off('keydown', pArray[p].keyDown);
             $body.off('keyup', pArray[p].keyUp);
@@ -414,7 +432,11 @@ $(function() {
         for(var p = 0; p < pArray.length; p += 1) {
             pArray[p].lives = startingLives;
             pArray[p].scoreScreen.html(pArray[p].lives);
-            console.log(pArray[p].scoreScreen);
+            $(pArray[p].healthBar).animate({
+                width: ((pArray[p].lives / startingLives) * 100) + '%'
+            });
+
+            //console.log(pArray[p].scoreScreen);
         }
     }
 
@@ -426,19 +448,22 @@ $(function() {
         if(scoreArray[0] > scoreArray[1]){
             winnerMsg = 'Player 1 Wins!';
             winner = pArray[0];
+            $(winner.ID).addClass('winning-dance');
 
         } else if(scoreArray[0] < scoreArray[1]) {
             //console.log('Player 2 Wins!');
             winnerMsg = 'Player 2 Wins!';
             winner = pArray[1];
+            $(winner.ID).addClass('winning-dance');
         } else {
             //console.log('You both need to work on your team skills.');
             winnerMsg = 'You both need to work on your team skills.';
         }
-        $(winner.ID).addClass('winning-dance');
+
 
         $winnerModal.fadeIn();
         $winnerMsg.html(winnerMsg).fadeIn();
+
     }
 
     //restart game with spacebar
@@ -447,6 +472,7 @@ $(function() {
             evt.preventDefault();
             $promptStart.fadeOut();
             gameStarted = false;
+            winner = null;
             startRound();
             resetPlayerScores();
         }
