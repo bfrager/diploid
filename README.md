@@ -6,6 +6,8 @@ A two-player cooperative game, where incoming obstacles must be dodged to earn a
 
 Each player steers their orb to avoid hitting incoming obstacles. The player's orbs are linked together by a beam that must also stay out of the path of incoming obstacles. Each collision takes players' health down, and if a player's health reaches 0, the other player wins.
 
+![alt tag](https://raw.githubusercontent.com/philuchansky/diploid/master/mockup/diploidScreenshot.png)
+
 ### Controls
 
 Player 1 moves their orb up, left, down, and right with the W,A,S,D keys respectively.
@@ -14,7 +16,7 @@ Player 2 moves their orb up, left, down, and right with the arrow keys respectiv
 
 Spacebar to start, or restart.
 
-![alt tag](https://github.com/philuchansky/diploid/blob/master/mockup/diploidMockup01.png)
+
 
 ## To Play
 Visit [http://philuchansky.github.io/diploid/](http://philuchansky.github.io/diploid/) to play, or simply download a .zip of this repo and open index.html in your browser.
@@ -30,6 +32,8 @@ JQuery and CSS transitions allow for all of the animations to remain fluid, alth
 - self-increasing difficulty. Currently set to low difficulty and the game does not gradually become harder yet.
 - Sound FX
 - Detailed orb artwork/design
+
+![alt tag](https://github.com/philuchansky/diploid/blob/master/mockup/diploidMockup01.png)
  
 
 # User Stories
