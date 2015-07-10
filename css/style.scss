@@ -59,6 +59,7 @@ body,html {
   h1 {
     text-align:center;
     color:#FFF;
+    font-size: 60px;
   }
   h2 {
     color:#80E7CE;
@@ -171,7 +172,7 @@ svg {
 
   stroke-width:2;
 
-  animation: strokePulse .5s infinite!important;
+  animation: strokePulse .7s infinite!important;
 }
 
 #testBlock {

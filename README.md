@@ -18,8 +18,6 @@ Player 2 moves their orb up, left, down, and right with the arrow keys respectiv
 
 As a player, I have the option of playing the game without a partner, so that I can enjoy it solo when there's no-one to play with.
 
-As a player, I feel the game's difficulty level increase over time, so that there is added value to a higher score.
-
 As a player, I can control the game with one hand so that another player can be sitting at the same keyboard to play simultanously and comfortably.
 
 As a player, when losing the game, I'm prompted to play again with a single keystroke so that I can start over without having to refresh the page, and so that I can take my time in starting over.

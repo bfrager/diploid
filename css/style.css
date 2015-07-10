@@ -41,7 +41,8 @@ body, html {
   background-size: cover; }
   #start-prompt h1 {
     text-align: center;
-    color: #FFF; }
+    color: #FFF;
+    font-size: 60px; }
   #start-prompt h2 {
     color: #80E7CE; }
 
@@ -133,7 +134,7 @@ svg {
 #line {
   stroke: #26a3d3;
   stroke-width: 2;
-  animation: strokePulse 0.5s infinite !important; }
+  animation: strokePulse 0.7s infinite !important; }
 
 #testBlock {
   background: #ee6e4d;
