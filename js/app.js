@@ -1,7 +1,6 @@
 $(function() {
     var $body = $('body');
     var $diploid = $('#diploid');
-    var $time = $('#time-number');
 
     var $promptStart = $('#start-prompt');
 
@@ -26,7 +25,7 @@ $(function() {
 
     //global speed
     var speed = 3;
-    var playerArray = [];
+    var pArray = [];
     var blockArray = [];
 
     var grid = 150;
@@ -35,58 +34,8 @@ $(function() {
     var blockDuration = 4000;
 
     var start;
-    var $p1score = $('#p1-score-number');
-    var $p2score = $('#p2-score-number');
-    var elapsedTime = 0;
-    var timer;
-
-    var coinWorth = 1000;
-    //for timer
-   /* var m = 0;
-    var s = 0;*/
-
-    /*function addScore(points){
-        score += points;
-        $score.html(score);
-    }*/
-
-    var Coin = function () {
-        $diploid.append('<div class="coin"></div>');
-        var c = this;
-        //c.sel = '#' + coinID;
-        c.birthday = new Date();
-        var $coin = $('.coin');
-
-        c.worth = coinWorth;
-
-        $coin.css({
-            top: ($coin.height() + (Math.random() * ($diploid.height() - $coin.height()))),
-            left: ($coin.width() + (Math.random() * ($diploid.width() - $coin.width())))
-        });
-
-        function coinHitCheck() {
-            for(var p = 0; p < playerArray.length; p += 1){
-                if(checkCollision($(playerArray[p].ID),$coin)) {
-                    clearInterval(c.tick);
-                    addScore(c.worth);
-                    $coin.fadeOut(function(){
-                        $coin.remove();
-                        //c = null;
-                        spawnCoin();
-                    });
-                    break;
-                }
-            }
-        }
-
-        console.log(this);
-        c.tick = setInterval(coinHitCheck,10);
-
-    };
-
-    function spawnCoin() {
-        var newCoin = new Coin();
-    }
+    var $p1score = $('#p1-health');
+    var $p2score = $('#p2-health');
 
     //PLAYER OBJECT
     var Player = function (selectorID, ghostID, lKeyCode, rKeyCode, uKeyCode, dKeyCode, startingX,scoreScreen) {
@@ -101,6 +50,8 @@ $(function() {
         var $psel = $(p.ID);
 
         p.lives = startingLives;
+
+        p.scoreScreen.html(p.lives);
 
         p.getCenter = function () {
             p.centerX = (parseInt($psel.css("left")) + (parseInt($psel.width()) / 2 ));
@@ -193,7 +144,7 @@ $(function() {
         p.html = [p.ID, p.g];
 
         //add this player to the player array so that both players can be targeted together quickly
-        playerArray.push(p);
+        pArray.push(p);
     };
 
     //BLOCK OBJECT
@@ -231,10 +182,10 @@ $(function() {
                 return false;
             } else {
                 console.log('The Line Broke! Both players lose');
-                for(var p = 0; p < playerArray.length; p += 1) {
-                    playerArray[p].lives -= 1;
-                    playerArray[p].scoreScreen.html(playerArray[p].lives);
-                    console.log(playerArray[p].name + ' has ' + playerArray[p].lives + ' lives now.');
+                for(var p = 0; p < pArray.length; p += 1) {
+                    pArray[p].lives -= 1;
+                    pArray[p].scoreScreen.html(pArray[p].lives);
+                    console.log(pArray[p].name + ' has ' + pArray[p].lives + ' lives now.');
                 }
                 startRound();
             }
@@ -247,11 +198,11 @@ $(function() {
                 b.TRX = $bsel.position().left + $bsel.width();
                 b.BRY = $bsel.position().top + $bsel.height();
 
-                for (var p = 0; p < playerArray.length; p += 1) {
-                    if (checkCollision($(playerArray[p].ID), $bsel)) {
-                        playerArray[p].lives -= 1;
-                        playerArray[p].score -= 100;
-                        console.log(playerArray[p].name + 'has ' + playerArray[p].lives + ' lives!');
+                for (var p = 0; p < pArray.length; p += 1) {
+                    if (checkCollision($(pArray[p].ID), $bsel)) {
+                        pArray[p].lives -= 1;
+                        pArray[p].scoreScreen.html(pArray[p].lives);
+                        console.log(pArray[p].name + 'has ' + pArray[p].lives + ' lives!');
                         startRound();
                         break;
                     }
@@ -357,9 +308,9 @@ $(function() {
 
     function tick() {
         if(!paused) {
-            for(var i = 0; i < playerArray.length; i += 1) {
-                playerArray[i].move();
-                playerArray[i].score += 1;
+            for(var i = 0; i < pArray.length; i += 1) {
+                pArray[i].move();
+                pArray[i].score += 1;
             }
             alignLine();
         }
@@ -374,12 +325,11 @@ $(function() {
     //initialize the game
     function startRound() {
         clearBlocks();
-        clearInterval(timer);
 
         //create players on first game
         if(isFirstGame){
             $('.orb').clearQueue().stop(true,true).remove();
-            playerArray = [];
+            pArray = [];
             p1 = new Player('p1', 'ghost1', 65, 68, 87, 83,p1StartingX,$p1score);
             p2 = new Player('p2', 'ghost2', 37, 39, 38, 40,p2StartingX,$p2score);
             alignLine();
@@ -393,27 +343,27 @@ $(function() {
         resetPlayers();
     }
     function rebind(p) {
-        $body.on('keydown', playerArray[p].keyDown);
-        $body.on('keyup',playerArray[p].keyUp);
+        $body.on('keydown', pArray[p].keyDown);
+        $body.on('keyup',pArray[p].keyUp);
     }
 
     //temporarily remove mobility while animating, then re-enable;
     function resetPlayers() {
 
-        for(var p = 0; p < playerArray.length; p += 1) {
-            playerArray[p].moveLeft = false;
-            playerArray[p].moveRight = false;
-            playerArray[p].moveUp = false;
-            playerArray[p].moveDown = false;
+        for(var p = 0; p < pArray.length; p += 1) {
+            pArray[p].moveLeft = false;
+            pArray[p].moveRight = false;
+            pArray[p].moveUp = false;
+            pArray[p].moveDown = false;
 
-            $body.off('keydown', playerArray[p].keyDown);
-            $body.off('keyup', playerArray[p].keyUp);
+            $body.off('keydown', pArray[p].keyDown);
+            $body.off('keyup', pArray[p].keyUp);
 
-            if(!playerArray[p].lives == 0) {
-                $(playerArray[p].ID+','+playerArray[p].g).animate(
+            if(!pArray[p].lives == 0) {
+                $(pArray[p].ID+','+pArray[p].g).animate(
                     {
                         top: $diploid.height()/2,
-                        left: playerArray[p].startingX
+                        left: pArray[p].startingX
                     },
                     {
                         duration: 600,
@@ -428,10 +378,10 @@ $(function() {
                     console.log('Game play cleared');
                     isFirstGame = true;
                 }
-                $(playerArray[p].ID+','+playerArray[p].g).animate(
+                $(pArray[p].ID+','+pArray[p].g).animate(
                     {
                         top: $diploid.height()/2,
-                        left: playerArray[p].startingX
+                        left: pArray[p].startingX
                     },
                     {
                         duration: 600,
@@ -448,8 +398,8 @@ $(function() {
 
     function checkWinner() {
         var scoreArray = [];
-        for(var p = 0; p < playerArray.length; p += 1) {
-            scoreArray.push(playerArray[p].score);
+        for(var p = 0; p < pArray.length; p += 1) {
+            scoreArray.push(pArray[p].lives);
         }
         if(scoreArray[0] > scoreArray[1]){
             console.log('Player 1 Wins!');
