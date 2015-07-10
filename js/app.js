@@ -14,7 +14,8 @@ $(function() {
     var gameStarted;
     var startingLives = 5;
     var winner = null;
-    var $winner = $('#winner');
+    var $winnerModal = $('#winner');
+    var $winnerMsg = $('#winner h1');
     var loser = null;
 
     //line
@@ -184,6 +185,7 @@ $(function() {
             } else if ((lineX1 > b.TRX && lineX2 > b.TRX) || (lineX1 < b.BLX && lineX2 < b.BLX) || ((lineY1 > b.BRY && lineY2 > b.BRY)) || (lineY1 < b.TLY && lineY2 < b.TLY)) {
                 return false;
             } else {
+                hitFlicker();
                 console.log('The Line Broke! Both players lose');
                 for(var p = 0; p < pArray.length; p += 1) {
                     pArray[p].lives -= 1;
@@ -203,6 +205,7 @@ $(function() {
 
                 for (var p = 0; p < pArray.length; p += 1) {
                     if (checkCollision($(pArray[p].ID), $bsel)) {
+                        hitFlicker();
                         pArray[p].lives -= 1;
                         pArray[p].scoreScreen.html(pArray[p].lives);
                         console.log(pArray[p].name + 'has ' + pArray[p].lives + ' lives!');
@@ -266,6 +269,10 @@ $(function() {
         var top2 = pos2.top;
         var bottom2 = top2 + obj2.height();
         return ((right1 > left2 && (bottom1 > top2 && top1 < bottom2)) && (left1 < right2 && (top1 < bottom2 && bottom1 > top2)));
+    }
+
+    function hitFlicker() {
+        $('#hit-flicker').show().fadeOut('fast');
     }
 
     //create startGame for setInterval() in initDeploid()
@@ -340,7 +347,8 @@ $(function() {
             gamePlay = setInterval(tick, 10);
             isFirstGame = false;
 
-            $winner.fadeOut().html('');
+            $winnerModal.fadeOut();
+            $winnerMsg.html('');
         }
 
         generateBlocks(blockAmount);
@@ -405,7 +413,8 @@ $(function() {
     function resetPlayerScores() {
         for(var p = 0; p < pArray.length; p += 1) {
             pArray[p].lives = startingLives;
-            pArray[p].scoreScreen.html(p.lives);
+            pArray[p].scoreScreen.html(pArray[p].lives);
+            console.log(pArray[p].scoreScreen);
         }
     }
 
@@ -419,15 +428,17 @@ $(function() {
             winner = pArray[0];
 
         } else if(scoreArray[0] < scoreArray[1]) {
-            console.log('Player 2 Wins!');
+            //console.log('Player 2 Wins!');
             winnerMsg = 'Player 2 Wins!';
             winner = pArray[1];
         } else {
-            console.log('You both need to work on your team skills.');
+            //console.log('You both need to work on your team skills.');
             winnerMsg = 'You both need to work on your team skills.';
         }
         $(winner.ID).addClass('winning-dance');
-        $winner.html('<h1>' + winnerMsg + '</h1>').fadeIn();
+
+        $winnerModal.fadeIn();
+        $winnerMsg.html(winnerMsg).fadeIn();
     }
 
     //restart game with spacebar
