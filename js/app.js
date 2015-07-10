@@ -12,7 +12,7 @@ $(function() {
     var paused = false;
     var isFirstGame = true;
     var gameStarted;
-    var startingLives = 2;
+    var startingLives = 5;
     var winner = null;
     var $winner = $('#winner');
     var loser = null;
@@ -321,7 +321,8 @@ $(function() {
 
     //clear all blocks
     function clearBlocks() {
-        $('.block').clearQueue().stop().remove();
+        //$('.block').clearQueue().stop().remove();
+        $('.block').clearQueue().stop();
         blockArray = [];
     }
 
@@ -401,7 +402,7 @@ $(function() {
         }
     }
 
-    function initializePlayerScores() {
+    function resetPlayerScores() {
         for(var p = 0; p < pArray.length; p += 1) {
             pArray[p].lives = startingLives;
             pArray[p].scoreScreen.html(p.lives);
@@ -417,17 +418,18 @@ $(function() {
             winnerMsg = 'Player 1 Wins!';
             winner = pArray[0];
 
-        }else if(scoreArray[0] < scoreArray[1]) {
+        } else if(scoreArray[0] < scoreArray[1]) {
             console.log('Player 2 Wins!');
-            winnerMsg = 'Player 1 Wins!';
+            winnerMsg = 'Player 2 Wins!';
             winner = pArray[1];
         } else {
             console.log('You both need to work on your team skills.');
-            winnerMsg = 'You both lose.';
+            winnerMsg = 'You both need to work on your team skills.';
         }
         $(winner.ID).addClass('winning-dance');
         $winner.html('<h1>' + winnerMsg + '</h1>').fadeIn();
     }
+
     //restart game with spacebar
     $body.on('keypress', function(evt){
         if(evt.which == 32){
@@ -435,7 +437,7 @@ $(function() {
             $promptStart.fadeOut();
             gameStarted = false;
             startRound();
-            initializePlayerScores();
+            resetPlayerScores();
         }
     });
 });
