@@ -13,6 +13,9 @@ $(function() {
     var isFirstGame = true;
     var gameStarted;
     var startingLives = 2;
+    var winner = null;
+    var $winner = $('#winner');
+    var loser = null;
 
     //line
     var $line = $('#line');
@@ -335,6 +338,8 @@ $(function() {
             alignLine();
             gamePlay = setInterval(tick, 10);
             isFirstGame = false;
+
+            $winner.fadeOut().html('');
         }
 
         generateBlocks(blockAmount);
@@ -359,7 +364,7 @@ $(function() {
             $body.off('keydown', pArray[p].keyDown);
             $body.off('keyup', pArray[p].keyUp);
 
-            if(!pArray[p].lives == 0) {
+            if(pArray[p].lives != 0) {
                 $(pArray[p].ID+','+pArray[p].g).animate(
                     {
                         top: $diploid.height()/2,
@@ -402,12 +407,19 @@ $(function() {
             scoreArray.push(pArray[p].lives);
         }
         if(scoreArray[0] > scoreArray[1]){
-            console.log('Player 1 Wins!');
+            winnerMsg = 'Player 1 Wins!';
+            winner = pArray[0];
+
         }else if(scoreArray[0] < scoreArray[1]) {
             console.log('Player 2 Wins!');
+            winnerMsg = 'Player 1 Wins!';
+            winner = pArray[1];
         } else {
             console.log('You both need to work on your team skills.');
+            winnerMsg = 'You both lose.';
         }
+        $(winner.ID).addClass('winning-dance');
+        $winner.html('<h1>' + winnerMsg + '</h1>').fadeIn();
     }
     //restart game with spacebar
     $body.on('keypress', function(evt){

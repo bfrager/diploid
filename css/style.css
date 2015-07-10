@@ -30,6 +30,18 @@ body {
   text-align: center;
   color: #FFF; }
 
+#winner {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  display: none; }
+
+#winner h1 {
+  color: #FFF;
+  text-align: center;
+  margin-top: 40px; }
+
 .orb, .ghost {
   position: absolute;
   border-radius: 100px;
@@ -94,5 +106,38 @@ img.pControl {
   left: 300px;
   /*top:100px;*/
   z-index: 0; }
+
+.winning-dance {
+  -webkit-animation: winnerDanceAnim 1s infinite !important;
+  animation: winnerDanceAnim 1s infinite !important; }
+
+/*winner dances*/
+@-webkit-keyframes winnerDanceAnim {
+  0% {
+    -webkit-transform: scale(2);
+    transform: scale(2);
+    animation-timing-function: ease-in; }
+  50% {
+    -webkit-transform: scale(0.8);
+    transform: scale(0.8); }
+  100% {
+    -webkit-transform: scale(2);
+    transform: scale(2);
+    animation-timing-function: ease-out; } }
+@keyframes winnerDanceAnim {
+  0% {
+    -webkit-transform: scale(2);
+    -ms-transform: scale(2);
+    transform: scale(2);
+    animation-timing-function: ease-in; }
+  50% {
+    -webkit-transform: scale(0.8);
+    -ms-transform: scale(0.8);
+    transform: scale(0.8); }
+  100% {
+    -webkit-transform: scale(2);
+    -ms-transform: scale(2);
+    transform: scale(2);
+    animation-timing-function: ease-out; } }
 
 /*# sourceMappingURL=style.css.map */
