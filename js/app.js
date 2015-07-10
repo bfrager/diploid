@@ -5,9 +5,10 @@ $(function() {
     var $promptStart = $('#start-prompt');
 
     var p1;
+    var p2;
     var p1StartingX = $diploid.width() / 3;
     var p2StartingX = $diploid.width() * (2/3);
-    var p2;
+
 
     var paused = false;
     var isFirstGame = true;

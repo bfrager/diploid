@@ -76,9 +76,10 @@ body,html {
 .health-bar {
   height:30px;
   width:300px;
-  background:#999;
+  background:#333;
   //position:absolute;
   top:20px;
+  border:2px solid #FFF;
 }
 .health {
   height: 100%;
