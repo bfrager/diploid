@@ -173,8 +173,7 @@ svg {
 
   stroke-width:2;
 
-  //TODO Add more GPU-efficient pulse animation
-  //animation: strokePulse .7s infinite!important;
+  animation: strokePulse .7s infinite!important;
 }
 
 #testBlock {
