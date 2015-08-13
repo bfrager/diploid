@@ -136,8 +136,7 @@ svg {
 
 #line {
   stroke: #26a3d3;
-  stroke-width: 2;
-  animation: strokePulse 0.7s infinite !important; }
+  stroke-width: 2; }
 
 #testBlock {
   background: #ee6e4d;
