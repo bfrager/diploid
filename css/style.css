@@ -19,8 +19,8 @@ body, html {
   margin: 0 auto;
   position: relative;
   overflow: hidden;
-  -webkit-animation: bgAnim 5s infinite !important;
-  animation: bgAnim 5s infinite !important; }
+  /*-webkit-animation: bgAnim 5s infinite!important;
+  animation: bgAnim 5s infinite!important;*/ }
 
 #hud {
   position: absolute;

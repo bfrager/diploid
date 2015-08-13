@@ -30,8 +30,9 @@ body,html {
 //  for debugging
   overflow:hidden;
 
-  -webkit-animation: bgAnim 5s infinite!important;
-  animation: bgAnim 5s infinite!important;
+  //TODO Optimize GPU usage on animation of bg
+  /*-webkit-animation: bgAnim 5s infinite!important;
+  animation: bgAnim 5s infinite!important;*/
 
 }
 
